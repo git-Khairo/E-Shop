@@ -30,11 +30,11 @@
                   </li>
 
                   <li>
-                    <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> About </a>
+                    <a class="text-gray-500 transition hover:text-gray-500/75" href="{{ route('about') }}"> About </a>
                   </li>
 
                   <li>
-                    <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> Contact </a>
+                    <a class="text-gray-500 transition hover:text-gray-500/75" href="{{ route('contact') }}"> Contact </a>
                   </li>
                 </ul>
               </nav>
@@ -43,6 +43,8 @@
             @guest
 
             <div class="flex items-center gap-4">
+              {{-- Activate to add search icon --}}
+              {{-- <svg class="h-8 w-8 text-slate-600"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="10" cy="10" r="7" />  <line x1="21" y1="21" x2="15" y2="15" /></svg> --}}
               <div class="sm:flex sm:gap-4">
                 <a
                   class="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow"
@@ -64,13 +66,13 @@
             @endguest
             @auth
             <div x-data="{open : false}">
-                <button @click="open = !open" class="round-btn">
-                  <svg class="h-9 w-9 text-teal-600"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <button @click="open = !open" class="round-btn bg-slate-50">
+                  <svg class="h-8 w-8 text-teal-600 bg-slate-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                   </svg>                  
                 </button>
 
-                <div x-show="open" @click.outside="open = false" class="bg-white shadow-lg absolute top-15 rounded-lg overflow-hidden p-2">
+                <div x-show="open" @click.outside="open = false" class="bg-white shadow-lg absolute top-15 rounded-lg overflow-hidden p-1">
                     <p class="title mb-1 text-2xl text-teal-600">{{ auth()->user()->username }}</p>
                     <a href="{{ route('dashboard') }}" class="text-xl">DashBoard</a>
                     <form action="{{ route('logout') }}" method="post">
@@ -213,7 +215,7 @@
 
                 <ul class="mt-6 space-y-4 text-sm">
                   <li>
-                    <a href="#" class="text-gray-700 transition hover:opacity-75"> Contact </a>
+                    <a href="{{ route('contact') }}" class="text-gray-700 transition hover:opacity-75"> Contact </a>
                   </li>
 
                   <li>
@@ -221,7 +223,7 @@
                   </li>
 
                   <li>
-                    <a href="#" class="text-gray-700 transition hover:opacity-75"> About </a>
+                    <a href="{{ route('about') }}" class="text-gray-700 transition hover:opacity-75"> About </a>
                   </li>
                 </ul>
               </div>
