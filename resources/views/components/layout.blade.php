@@ -17,31 +17,31 @@
                 E-Shop
               </a>
             </div>
-      
+
             <div class="hidden md:block">
               <nav aria-label="Global">
                 <ul class="flex items-center gap-6 text-sm">
                 <li>
-                    <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> Categories </a>
+                    <a class="text-gray-500 transition hover:text-gray-500/75" href="{{ route('categories.index') }}"> Categories </a>
                 </li>
 
                   <li>
                     <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> Products </a>
                   </li>
-      
+
                   <li>
                     <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> About </a>
                   </li>
-      
+
                   <li>
                     <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> Contact </a>
                   </li>
                 </ul>
               </nav>
             </div>
-      
+
             @guest
-                
+
             <div class="flex items-center gap-4">
               <div class="sm:flex sm:gap-4">
                 <a
@@ -50,7 +50,7 @@
                 >
                   Login
                 </a>
-      
+
                 <div class="hidden sm:flex">
                   <a
                     class="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600"
@@ -72,7 +72,7 @@
 
                 <div x-show="open" @click.outside="open = false" class="bg-white shadow-lg absolute top-15 rounded-lg overflow-hidden p-2">
                     <p class="title mb-1 text-2xl text-teal-600">{{ auth()->user()->username }}</p>
-                    <a href="" class="text-xl">DashBoard</a>
+                    <a href="{{ route('dashboard') }}" class="text-xl">DashBoard</a>
                     <form action="{{ route('logout') }}" method="post">
                         @csrf
                         <button>Logout</button>
@@ -95,12 +95,12 @@
               <div class="text-teal-600 text-2xl">
                <p>E-Shop</p>
               </div>
-      
+
               <p class="mt-4 max-w-xs text-gray-500">
                 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse non cupiditate quae nam
                 molestias.
               </p>
-      
+
               <ul class="mt-8 flex gap-6">
                 <li>
                   <a
@@ -110,7 +110,7 @@
                     class="text-gray-700 transition hover:opacity-75"
                   >
                     <span class="sr-only">Facebook</span>
-      
+
                     <svg class="size-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path
                         fill-rule="evenodd"
@@ -120,7 +120,7 @@
                     </svg>
                   </a>
                 </li>
-      
+
                 <li>
                   <a
                     href="#"
@@ -129,7 +129,7 @@
                     class="text-gray-700 transition hover:opacity-75"
                   >
                     <span class="sr-only">Instagram</span>
-      
+
                     <svg class="size-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path
                         fill-rule="evenodd"
@@ -139,7 +139,7 @@
                     </svg>
                   </a>
                 </li>
-      
+
                 <li>
                   <a
                     href="#"
@@ -148,7 +148,7 @@
                     class="text-gray-700 transition hover:opacity-75"
                   >
                     <span class="sr-only">Twitter</span>
-      
+
                     <svg class="size-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path
                         d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"
@@ -156,7 +156,7 @@
                     </svg>
                   </a>
                 </li>
-      
+
                 <li>
                   <a
                     href="#"
@@ -165,7 +165,7 @@
                     class="text-gray-700 transition hover:opacity-75"
                   >
                     <span class="sr-only">GitHub</span>
-      
+
                     <svg class="size-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path
                         fill-rule="evenodd"
@@ -175,60 +175,60 @@
                     </svg>
                   </a>
                 </li>
-      
+
               </ul>
             </div>
-      
+
             <div class="flex align-items-center justify-between">
             {{-- <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-4"> --}}
               <div>
                 <p class="font-medium text-gray-900">Categories</p>
-      
+
                 <ul class="mt-6 space-y-4 text-sm">
                   <li>
                     <a href="#" class="text-gray-700 transition hover:opacity-75"> Shirts </a>
                   </li>
-      
+
                   <li>
                     <a href="#" class="text-gray-700 transition hover:opacity-75"> Pants </a>
                   </li>
-      
+
                   <li>
                     <a href="#" class="text-gray-700 transition hover:opacity-75"> Jackets </a>
                   </li>
-      
+
                   <li>
                     <a href="#" class="text-gray-700 transition hover:opacity-75"> Shoes </a>
                   </li>
-      
+
                   <li>
                     <a href="#" class="text-gray-700 transition hover:opacity-75"> Accessories </a>
                   </li>
                 </ul>
               </div>
-      
-      
+
+
               <div>
                 <p class="font-medium text-gray-900">Helpful Links</p>
-      
+
                 <ul class="mt-6 space-y-4 text-sm">
                   <li>
                     <a href="#" class="text-gray-700 transition hover:opacity-75"> Contact </a>
                   </li>
-      
+
                   <li>
                     <a href="#" class="text-gray-700 transition hover:opacity-75"> FAQs </a>
                   </li>
-      
+
                   <li>
                     <a href="#" class="text-gray-700 transition hover:opacity-75"> About </a>
                   </li>
                 </ul>
               </div>
-      
+
             </div>
           </div>
-      
+
           <p class="text-xs text-gray-500">&copy; 2022. E-Shop. All rights reserved.</p>
         </div>
       </footer>
