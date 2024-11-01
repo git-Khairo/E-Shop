@@ -5,13 +5,13 @@
           <div class="grid grid-cols-1 gap-y-8 lg:grid-cols-2 lg:items-center lg:gap-x-16">
             <div class="mx-auto max-w-lg text-center lg:mx-0 ltr:lg:text-left rtl:lg:text-right">
               <h2 class="text-3xl font-bold sm:text-4xl">Find your STYLE</h2>
-      
+
               <p class="mt-4 text-gray-600">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut vero aliquid sint distinctio
                 iure ipsum cupiditate? Quis, odit assumenda? Deleniti quasi inventore, libero reiciendis
                 minima aliquid tempora. Obcaecati, autem.
               </p>
-      
+
               <a
                 href="#"
                 class="mt-8 inline-block rounded bg-teal-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-teal-700 focus:outline-none focus:ring"
@@ -19,7 +19,7 @@
                 View products
               </a>
             </div>
-      
+
             <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
               <a
                 class="block rounded-xl border border-gray-100 p-4 shadow-sm hover:border-gray-200 hover:ring-1 hover:ring-gray-200 focus:outline-none focus:ring"
@@ -45,14 +45,14 @@
                     ></path>
                   </svg>
                 </span>
-      
+
                 <h2 class="mt-2 font-bold">Shirts</h2>
-      
+
                 <p class="hidden sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
                   Lorem ipsum dolor sit amet consectetur.
                 </p>
               </a>
-      
+
               <a
                 class="block rounded-xl border border-gray-100 p-4 shadow-sm hover:border-gray-200 hover:ring-1 hover:ring-gray-200 focus:outline-none focus:ring"
                 href="#"
@@ -77,14 +77,14 @@
                     ></path>
                   </svg>
                 </span>
-      
+
                 <h2 class="mt-2 font-bold">Pants</h2>
-      
+
                 <p class="hidden sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
                   Lorem ipsum dolor sit amet consectetur.
                 </p>
               </a>
-      
+
               <a
                 class="block rounded-xl border border-gray-100 p-4 shadow-sm hover:border-gray-200 hover:ring-1 hover:ring-gray-200 focus:outline-none focus:ring"
                 href="#"
@@ -109,14 +109,14 @@
                     ></path>
                   </svg>
                 </span>
-      
+
                 <h2 class="mt-2 font-bold">Jackets</h2>
-      
+
                 <p class="hidden sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
                   Lorem ipsum dolor sit amet consectetur.
                 </p>
               </a>
-      
+
               <a
                 class="block rounded-xl border border-gray-100 p-4 shadow-sm hover:border-gray-200 hover:ring-1 hover:ring-gray-200 focus:outline-none focus:ring"
                 href="#"
@@ -141,14 +141,14 @@
                     ></path>
                   </svg>
                 </span>
-      
+
                 <h2 class="mt-2 font-bold">Shoes</h2>
-      
+
                 <p class="hidden sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
                   Lorem ipsum dolor sit amet consectetur.
                 </p>
               </a>
-      
+
               <a
                 class="block rounded-xl border border-gray-100 p-4 shadow-sm hover:border-gray-200 hover:ring-1 hover:ring-gray-200 focus:outline-none focus:ring"
                 href="#"
@@ -173,14 +173,14 @@
                     ></path>
                   </svg>
                 </span>
-      
+
                 <h2 class="mt-2 font-bold">Underwear</h2>
-      
+
                 <p class="hidden sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
                   Lorem ipsum dolor sit amet consectetur.
                 </p>
               </a>
-      
+
               <a
                 class="block rounded-xl border border-gray-100 p-4 shadow-sm hover:border-gray-200 hover:ring-1 hover:ring-gray-200 focus:outline-none focus:ring"
                 href="#"
@@ -205,9 +205,9 @@
                     ></path>
                   </svg>
                 </span>
-      
+
                 <h2 class="mt-2 font-bold">Accessories</h2>
-      
+
                 <p class="hidden sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
                   Lorem ipsum dolor sit amet consectetur.
                 </p>
@@ -222,13 +222,13 @@
     <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
       <header class="text-center">
         <h2 class="text-xl font-bold text-gray-900 sm:text-3xl">New Collection</h2>
-  
+
         <p class="mx-auto mt-4 max-w-md text-gray-500">
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque praesentium cumque iure
           dicta incidunt est ipsam, officia dolor fugit natus?
         </p>
       </header>
-  
+
       <ul class="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-3">
         <li>
           <a href="#" class="group relative block">
@@ -237,10 +237,10 @@
               alt=""
               class="aspect-square w-full object-cover transition duration-500 group-hover:opacity-90"
             />
-  
+
             <div class="absolute inset-0 flex flex-col items-start justify-end p-6">
               <h3 class="text-xl font-medium text-white">Casual Trainers</h3>
-  
+
               <span
                 class="mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white"
               >
@@ -249,7 +249,7 @@
             </div>
           </a>
         </li>
-  
+
         <li>
           <a href="#" class="group relative block">
             <img
@@ -257,10 +257,10 @@
               alt=""
               class="aspect-square w-full object-cover transition duration-500 group-hover:opacity-90"
             />
-  
+
             <div class="absolute inset-0 flex flex-col items-start justify-end p-6">
               <h3 class="text-xl font-medium text-white">Winter Jumpers</h3>
-  
+
               <span
                 class="mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white"
               >
@@ -269,7 +269,7 @@
             </div>
           </a>
         </li>
-  
+
         <li class="lg:col-span-2 lg:col-start-2 lg:row-span-2 lg:row-start-1">
           <a href="#" class="group relative block">
             <img
@@ -277,10 +277,10 @@
               alt=""
               class="aspect-square w-full object-cover transition duration-500 group-hover:opacity-90"
             />
-  
+
             <div class="absolute inset-0 flex flex-col items-start justify-end p-6">
               <h3 class="text-xl font-medium text-white">Skinny Jeans Blue</h3>
-  
+
               <span
                 class="mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white"
               >
