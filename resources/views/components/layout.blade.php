@@ -65,7 +65,9 @@
             @auth
             <div x-data="{open : false}">
                 <button @click="open = !open" class="round-btn">
-                    <img src="https://picsum.photos/200" width="50px" height="50px" >
+                  <svg class="h-9 w-9 text-teal-600"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>                  
                 </button>
 
                 <div x-show="open" @click.outside="open = false" class="bg-white shadow-lg absolute top-15 rounded-lg overflow-hidden p-2">
