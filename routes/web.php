@@ -18,9 +18,9 @@ Route::middleware('guest')->group(function() {
     Route::view('/register', 'pages.register')->name('register');
     Route::post('/register', [AuthController::class, 'register']);
 
-    Route::view('/about', 'pages.about')->name('about');
-    Route::view('/contact', 'pages.contact')->name('contact');
 });
+Route::view('/about', 'pages.about')->name('about');
+Route::view('/contact', 'pages.contact')->name('contact');
 
 Route::middleware('auth')->group(function() {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
