@@ -7,10 +7,6 @@ use App\Http\Controllers\AuthController;
 
 Route::view('/', 'pages.home')->name('home');
 
-Route::resource('categories',CategoriesController::class);
-
-Route::get('/categories/{id}',[CategoriesController::class,'show']);
-
 Route::middleware('guest')->group(function() {
     Route::view('/login', 'pages.Login')->name('login');
     Route::post('/login', [AuthController::class, 'login']);
@@ -21,6 +17,8 @@ Route::middleware('guest')->group(function() {
 });
 Route::view('/about', 'pages.about')->name('about');
 Route::view('/contact', 'pages.contact')->name('contact');
+Route::view('/products', 'pages.products')->name('products');
+
 
 Route::middleware('auth')->group(function() {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
