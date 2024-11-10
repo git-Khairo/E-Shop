@@ -95,18 +95,18 @@
         @endguest
         @auth
         <div x-data="{open : false}">
-            <button @click="open = !open" class="round-btn bg-slate-50">
-              <svg class="h-8 w-8 text-teal-600 bg-slate-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button @click="open = !open" class="round-btn">
+              <svg class="h-8 w-8 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
               </svg>                  
             </button>
 
-            <div x-show="open" @click.outside="open = false" class="bg-white shadow-lg absolute top-15 rounded-lg overflow-hidden p-1">
-                <p class="title mb-1 text-2xl text-teal-600">{{ auth()->user()->username }}</p>
-                <a href="{{ route('dashboard') }}" class="text-xl">DashBoard</a>
+            <div x-show="open" @click.outside="open = false" class="bg-white shadow-lg absolute top-15 rounded-lg overflow-hidden">
+                <p class="title mb-1 mx-1 text-2xl text-teal-600">{{ auth()->user()->username }}</p>
+                <a href="{{ route('dashboard') }}" class="text-xl hover:bg-teal-600 hover:text-white py-1 px-2 rounded-lg">My Orders</a>
                 <form action="{{ route('logout') }}" method="post">
                     @csrf
-                    <button>Logout</button>
+                    <button class="text-base hover:bg-teal-600 hover:text-white rounded-lg w-full">Logout</button>
                 </form>
             </div>
         </div>

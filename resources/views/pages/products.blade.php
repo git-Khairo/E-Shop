@@ -1,6 +1,6 @@
 <x-layout>
 <div class="flex justify-center">
-<aside id="default-sidebar" class="relative left-0 z-0 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+<aside id="default-sidebar" class="relative left-0 z-0 w-96 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
   <div class="h-full px-3 py-4 overflow-y-auto bg-white dark:bg-gray-800">
     <h1 class="my-5 text-xl ">Categories</h1>
      <ul class="space-y-2 font-medium">
@@ -713,7 +713,7 @@
         </div>
       </div>
     </div>
-</div>
+  </div>
 </div>
 <div class="flex justify-center items-center">
   <button class="bg-teal-600 px-5 py-2 rounded-lg text-base my-5 text-white hover:bg-teal-700">Show More</button>

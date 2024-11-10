@@ -15,6 +15,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-    
+        DB::table('categories')->insert([
+            ['type' => 'shirts'],
+            ['type' => 'pants'],
+            ['type' => 'jacket'],
+            ['type' => 'shoes'],
+            ['type' => 'underwear'],
+            ['type' => 'accessories'],
+        ]);
     }
 }

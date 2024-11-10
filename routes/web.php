@@ -15,6 +15,7 @@ Route::middleware('guest')->group(function() {
     Route::post('/register', [AuthController::class, 'register']);
 
 });
+
 Route::view('/about', 'pages.about')->name('about');
 Route::view('/contact', 'pages.contact')->name('contact');
 Route::view('/products', 'pages.products')->name('products');
