@@ -2,7 +2,7 @@
     <div class="sm:flex items-center max-w-screen-xl">
         <div class="sm:w-1/2 p-10">
             <div class="image object-center text-center">
-                <img src="https://imgur.com/WbQnbas.png" alt="photo">
+                <img src="{{ asset('storage/images/about.png') }}" alt="photo">
             </div>
         </div>
         <div class="sm:w-1/2 p-5">
@@ -20,9 +20,7 @@
     </div>
 
     <span class="flex items-center mx-20">
-        <span class="h-px flex-1 bg-black"></span>
-        <span class="shrink-0 px-6">Lorem, ipsum dolor</span>
-        <span class="h-px flex-1 bg-black"></span>
+        <span class="h-px flex-1 bg-gray-700"></span>
     </span>
 
     <section class="text-gray-700 body-font">

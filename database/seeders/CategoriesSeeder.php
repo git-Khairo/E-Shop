@@ -13,6 +13,6 @@ class CategoriesSeeder extends Seeder
      */
     public function run(): void
     {
-
+       
     }
 }

@@ -7,90 +7,121 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ env("APP_NAME") }}</title>
     @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
 </head>
 <body class="bg-white text-slate-900">
-    <header class="bg-white">
-        <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
-          <div class="flex h-16 items-center justify-between">
-            <div class="md:flex md:items-center md:gap-12">
-              <a class="block text-teal-600 text-3xl" href="{{ route('home') }}">
-                E-Shop
+  <header class="bg-white relative w-full z-10">
+    <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between">
+        <div class="md:flex md:items-center md:gap-12">
+          <a class="block text-teal-600 text-3xl" href="{{ route('home') }}">
+            E-Shop
+          </a>
+        </div>
+          <nav aria-label="Global" class="py-2">
+            <ul class="flex items-center gap-6 text-sm">
+              <li>
+                <div id="hs-navbar-basic-usage" class="hidden hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:block" aria-labelledby="hs-navbar-basic-usage-collapse">
+                  <div class="hs-dropdown [--strategy:static] sm:[--strategy:absolute] [--adaptive:none] sm:[--trigger:hover] [--auto-close:false] [--is-collapse:true] sm:[--is-collapse:false] ">
+                  <button id="hs-mega-menu" type="button" class="hs-dropdown-toggle sm:p-2 flex items-center w-full text-gray-500 hover:text-gray-500/75 focus:outline-none" aria-haspopup="menu" aria-expanded="false" aria-label="Mega Menu">
+                   Categories
+                  </button>
+                  <div class="hs-dropdown-menu transition-[height] sm:transition-[opacity,margin] duration-300 ease-in-out sm:duration-[150ms] hs-dropdown-open:opacity-100 opacity-0 w-full hidden z-20 sm:mt-3 top-full min-w-72 start-0 bg-white sm:shadow-md rounded-lg sm:px-2 before:absolute" role="menu" aria-orientation="vertical" aria-labelledby="hs-mega-menu">
+                    <div class="sm:grid grid-cols-3">
+                      <div class="flex flex-col mb-2">
+                        <a class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" href="#">
+                          Shirts
+                        </a>
+                        <a class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" href="#">
+                          Pants
+                        </a>
+                        <a class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" href="#">
+                          Jackets
+                        </a>
+                      </div>
+              
+                      <div class="flex flex-col mb-2">
+                        <a class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" href="#">
+                          Shoes
+                        </a>
+                        <a class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" href="#">
+                          Underwear
+                        </a>
+                        <a class="px-3 py-2 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" href="#">
+                          Accessories
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </li>
+
+              <li>
+                <a class="text-gray-500 transition hover:text-gray-500/75" href="{{ route('products') }}"> Products </a>
+              </li>
+
+              <li>
+                <a class="text-gray-500 transition hover:text-gray-500/75" href="{{ route('about') }}"> About </a>
+              </li>
+
+              <li>
+                <a class="text-gray-500 transition hover:text-gray-500/75" href="{{ route('contact') }}"> Contact </a>
+              </li>
+            </ul>
+          </nav>
+
+        @guest
+
+        <div class="flex items-center gap-4">
+          <div class="sm:flex sm:gap-4">
+            <a
+              class="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow"
+              href="{{ route('login') }}"
+            >
+              Login
+            </a>
+
+            <div class="hidden sm:flex">
+              <a
+                class="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600"
+                href="{{ route('register') }}"
+              >
+                Register
               </a>
             </div>
-
-            <div class="hidden md:block">
-              <nav aria-label="Global">
-                <ul class="flex items-center gap-6 text-sm">
-                <li>
-                    <a class="text-gray-500 transition hover:text-gray-500/75" href="{{ route('categories.index') }}"> Categories </a>
-                </li>
-
-                  <li>
-                    <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> Products </a>
-                  </li>
-
-                  <li>
-                    <a class="text-gray-500 transition hover:text-gray-500/75" href="{{ route('about') }}"> About </a>
-                  </li>
-
-                  <li>
-                    <a class="text-gray-500 transition hover:text-gray-500/75" href="{{ route('contact') }}"> Contact </a>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-
-            @guest
-
-            <div class="flex items-center gap-4">
-              {{-- Activate to add search icon --}}
-              {{-- <svg class="h-8 w-8 text-slate-600"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="10" cy="10" r="7" />  <line x1="21" y1="21" x2="15" y2="15" /></svg> --}}
-              <div class="sm:flex sm:gap-4">
-                <a
-                  class="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow"
-                  href="{{ route('login') }}"
-                >
-                  Login
-                </a>
-
-                <div class="hidden sm:flex">
-                  <a
-                    class="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600"
-                    href="{{ route('register') }}"
-                  >
-                    Register
-                  </a>
-                </div>
-              </div>
-            </div>
-            @endguest
-            @auth
-            <div x-data="{open : false}">
-                <button @click="open = !open" class="round-btn bg-slate-50">
-                  <svg class="h-8 w-8 text-teal-600 bg-slate-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                  </svg>                  
-                </button>
-
-                <div x-show="open" @click.outside="open = false" class="bg-white shadow-lg absolute top-15 rounded-lg overflow-hidden p-1">
-                    <p class="title mb-1 text-2xl text-teal-600">{{ auth()->user()->username }}</p>
-                    <a href="{{ route('dashboard') }}" class="text-xl">DashBoard</a>
-                    <form action="{{ route('logout') }}" method="post">
-                        @csrf
-                        <button>Logout</button>
-                    </form>
-                </div>
-            </div>
-            @endauth
           </div>
         </div>
-      </header>
+        @endguest
+        @auth
+        <div x-data="{open : false}">
+            <button @click="open = !open" class="round-btn">
+              <svg class="h-8 w-8 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>                  
+            </button>
+
+            <div x-show="open" @click.outside="open = false" class="bg-white shadow-lg absolute top-15 rounded-lg overflow-hidden">
+                <p class="title mb-1 mx-1 text-2xl text-teal-600">{{ auth()->user()->username }}</p>
+                <a href="{{ route('dashboard') }}" class="text-xl hover:bg-teal-600 hover:text-white py-1 px-2 rounded-lg">My Orders</a>
+                <form action="{{ route('logout') }}" method="post">
+                    @csrf
+                    <button class="text-base hover:bg-teal-600 hover:text-white rounded-lg w-full">Logout</button>
+                </form>
+            </div>
+        </div>
+        
+        @endauth
+      </div>
+    </div>
+  </header>
+
 
     <main>
         {{ $slot }}
     </main>
 
-    <footer class="bg-slate-50">
+    <footer class="bg-gray-100">
         <div class="mx-auto max-w-screen-xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8">
           <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <div>
