@@ -14,8 +14,6 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('products')->insert([
-            ['name' => 'Black T-Shirt', 'price' => 49.99, 'image' => 'B-Tee.png', 'categories_id' => 1],
-        ]);
+
     }
 }

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\categories;
-use App\Http\Requests\StorecategoriesRequest;
-use App\Http\Requests\UpdatecategoriesRequest;
+use App\Models\product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategoriesController extends Controller
 {
@@ -13,58 +14,21 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $categories=categories::paginate(6);
+        $products = product::paginate(12);
+        $categories = categories::get();
 
-        return view('product.categories',['categories'=> $categories]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StorecategoriesRequest $request)
-    {
-        //
+        return view('pages.products',['products'=> $products, 'category' => 0, 'categories' => $categories]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
-    {
-        $category=categories::where('id',$id)->firstOrFail();
-        $products=$category->products()->paginate(6);
-        return view('product.products',['products'=>$products, 'category'=>$category]);
+    public function show(Request $request){
+        $categoryId = $request->category;
+
+        $products = product::where('categories_id', $categoryId)->paginate(12);
+
+        return view('pages.products',['products'=> $products, 'category' => $categoryId]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(categories $categories)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatecategoriesRequest $request, categories $categories)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(categories $categories)
-    {
-        //
-    }
 }
