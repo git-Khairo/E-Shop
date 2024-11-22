@@ -27,31 +27,34 @@
                    Categories
                   </button>
                   <div class="hs-dropdown-menu transition-[height] sm:transition-[opacity,margin] duration-300 ease-in-out sm:duration-[150ms] hs-dropdown-open:opacity-100 opacity-0 w-full hidden z-20 sm:mt-3 top-full min-w-72 start-0 bg-white sm:shadow-md rounded-lg sm:px-2 before:absolute" role="menu" aria-orientation="vertical" aria-labelledby="hs-mega-menu">
-                    <div class="sm:grid grid-cols-3">
-                      <div class="flex flex-col mb-2">
-                        <a class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" href="#">
-                          Shirts
-                        </a>
-                        <a class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" href="#">
-                          Pants
-                        </a>
-                        <a class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" href="#">
-                          Jackets
-                        </a>
+                    <form action="{{ route('showProducts') }}" method="post">
+                      @csrf
+                      <div class="sm:grid grid-cols-3">
+                        <div class="flex flex-col mb-2">
+                          <button class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" name="category" value="1" onclick="this.form.submit()">
+                            Shirts
+                          </button>
+                          <button class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" name="category" value="2" onclick="this.form.submit()">
+                            Pants
+                          </button>
+                          <button class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" name="category" value="3" onclick="this.form.submit()">
+                            Jackets
+                          </button>
+                        </div>
+                
+                        <div class="flex flex-col mb-2">
+                          <button class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" name="category" value="4" onclick="this.form.submit()">
+                            Shoes
+                          </button>
+                          <button class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" name="category" value="5" onclick="this.form.submit()">
+                            Underwear
+                          </button>
+                          <button class="px-3 py-2 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" name="category" value="6" onclick="this.form.submit()">
+                            Accessories
+                          </button>
+                        </div>
                       </div>
-              
-                      <div class="flex flex-col mb-2">
-                        <a class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" href="#">
-                          Shoes
-                        </a>
-                        <a class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" href="#">
-                          Underwear
-                        </a>
-                        <a class="px-3 py-2 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" href="#">
-                          Accessories
-                        </a>
-                      </div>
-                    </div>
+                    </form>
                   </div>
                   </div>
                 </div>
@@ -94,23 +97,32 @@
         </div>
         @endguest
         @auth
-        <div x-data="{open : false}">
-            <button @click="open = !open" class="round-btn">
-              <svg class="h-8 w-8 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-              </svg>                  
-            </button>
-
-            <div x-show="open" @click.outside="open = false" class="bg-white shadow-lg absolute top-15 rounded-lg overflow-hidden">
-                <p class="title mb-1 mx-1 text-2xl text-teal-600">{{ auth()->user()->username }}</p>
-                <a href="{{ route('dashboard') }}" class="text-xl hover:bg-teal-600 hover:text-white py-1 px-2 rounded-lg">My Orders</a>
-                <form action="{{ route('logout') }}" method="post">
-                    @csrf
-                    <button class="text-base hover:bg-teal-600 hover:text-white rounded-lg w-full">Logout</button>
-                </form>
+        <div class="flex justify-between items-center">
+          <a class="relative pb-2 mx-10" href="{{ route('cart') }}">
+            <div class="t-0 absolute left-3">
+              <p class="flex h-2 w-2 items-center justify-center rounded-full bg-teal-500 p-3 text-xs text-white">{{ count(session('cart', [])); }}</p>
             </div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="file: mt-4 h-6 w-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+            </svg>
+          </a>
+          <div x-data="{open : false}">
+              <button @click="open = !open" class="round-btn">
+                <svg class="h-8 w-8 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>                  
+              </button>
+
+              <div x-show="open" @click.outside="open = false" class="bg-white shadow-lg absolute top-15 rounded-lg overflow-hidden">
+                  <p class="title mb-1 mx-1 text-2xl text-teal-600">{{ auth()->user()->username }}</p>
+                  <a href="{{ route('dashboard') }}" class="text-xl hover:bg-teal-600 hover:text-white py-1 px-2 rounded-lg">My Orders</a>
+                  <form action="{{ route('logout') }}" method="post">
+                      @csrf
+                      <button class="text-base hover:bg-teal-600 hover:text-white rounded-lg w-full">Logout</button>
+                  </form>
+              </div>
+          </div>
         </div>
-        
         @endauth
       </div>
     </div>
@@ -219,23 +231,23 @@
 
                 <ul class="mt-6 space-y-4 text-sm">
                   <li>
-                    <a href="#" class="text-gray-700 transition hover:opacity-75"> Shirts </a>
+                    <a href="{{ route('products') }}" class="text-gray-700 transition hover:opacity-75"> Shirts </a>
                   </li>
 
                   <li>
-                    <a href="#" class="text-gray-700 transition hover:opacity-75"> Pants </a>
+                    <a href="{{ route('products') }}" class="text-gray-700 transition hover:opacity-75"> Pants </a>
                   </li>
 
                   <li>
-                    <a href="#" class="text-gray-700 transition hover:opacity-75"> Jackets </a>
+                    <a href="{{ route('products') }}" class="text-gray-700 transition hover:opacity-75"> Jackets </a>
                   </li>
 
                   <li>
-                    <a href="#" class="text-gray-700 transition hover:opacity-75"> Shoes </a>
+                    <a href="{{ route('products') }}" class="text-gray-700 transition hover:opacity-75"> Shoes </a>
                   </li>
 
                   <li>
-                    <a href="#" class="text-gray-700 transition hover:opacity-75"> Accessories </a>
+                    <a href="{{ route('products') }}" class="text-gray-700 transition hover:opacity-75"> Accessories </a>
                   </li>
                 </ul>
               </div>
@@ -250,7 +262,7 @@
                   </li>
 
                   <li>
-                    <a href="#" class="text-gray-700 transition hover:opacity-75"> FAQs </a>
+                    <a href="{{ route('contact') }}" class="text-gray-700 transition hover:opacity-75"> FAQs </a>
                   </li>
 
                   <li>

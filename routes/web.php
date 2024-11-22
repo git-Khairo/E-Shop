@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\Dashboardcontroller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 
 Route::view('/', 'pages.home')->name('home');
 
@@ -22,7 +23,14 @@ Route::get('/products', [CategoriesController::class, 'index'])->name('products'
 Route::post('/products', [CategoriesController::class, 'show'])->name('showProducts');
 
 
+
 Route::middleware('auth')->group(function() {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [Dashboardcontroller::class, 'index'])->name('dashboard');
+    Route::get('/cart', [CartController::class, 'viewCart'])->name('cart');
+    Route::post('/cart', [CartController::class, 'AddtoCart'])->name('AddtoCart');
+    Route::post('/checkout', [CartController::class, 'saveToDatabase'])->name('saveToDatabase');
+    Route::delete('/cart/{product_id}', [CartController::class, 'removeFromCart'])->name('removeFromCart');
+    Route::patch('/cart/increase/{product_id}', [CartController::class, 'increaseQuantity'])->name('cartIncrease');
+    Route::patch('/cart/decrease/{product_id}', [CartController::class, 'decreaseQuantity'])->name('cartDecrease');
 });
