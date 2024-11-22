@@ -41,7 +41,7 @@
                             Jackets
                           </button>
                         </div>
-                
+
                         <div class="flex flex-col mb-2">
                           <button class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" name="category" value="4" onclick="this.form.submit()">
                             Shoes
@@ -54,7 +54,25 @@
                           </button>
                         </div>
                       </div>
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
                     </form>
+=======
+
+>>>>>>> Stashed changes
+                      <div class="flex flex-col mb-2">
+                        <a class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" href="#">
+                          Shoes
+                        </a>
+                        <a class="py-2 px-3 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" href="#">
+                          Underwear
+                        </a>
+                        <a class="px-3 py-2 rounded-lg text-teal-600 hover:bg-teal-600 hover:text-slate-50" href="#">
+                          Accessories
+                        </a>
+                      </div>
+                    </div>
+>>>>>>> Stashed changes
                   </div>
                   </div>
                 </div>
@@ -97,10 +115,31 @@
         </div>
         @endguest
         @auth
+<<<<<<< Updated upstream
         <div class="flex justify-between items-center">
           <a class="relative pb-2 mx-10" href="{{ route('cart') }}">
             <div class="t-0 absolute left-3">
               <p class="flex h-2 w-2 items-center justify-center rounded-full bg-teal-500 p-3 text-xs text-white">{{ count(session('cart', [])); }}</p>
+=======
+        <div x-data="{open : false}">
+            <button @click="open = !open" class="round-btn">
+              <svg class="h-8 w-8 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+            </button>
+
+            <div x-show="open" @click.outside="open = false" class="bg-white shadow-lg absolute top-15 rounded-lg overflow-hidden">
+                <p class="title mb-1 mx-1 text-2xl text-teal-600">{{ auth()->user()->username }}</p>
+                @role('admin')
+                <a href="{{ route('AdminPanel') }}" class="text-xl hover:bg-teal-600 hover:text-white py-1 px-2 rounded-lg">Admin Panel</a>
+                @else
+                <a href="{{ route('dashboard') }}" class="text-xl hover:bg-teal-600 hover:text-white py-1 px-2 rounded-lg">My Orders</a>
+                @endrole
+                <form action="{{ route('logout') }}" method="post">
+                    @csrf
+                    <button class="text-base hover:bg-teal-600 hover:text-white rounded-lg w-full">Logout</button>
+                </form>
+>>>>>>> Stashed changes
             </div>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="file: mt-4 h-6 w-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
@@ -110,7 +149,7 @@
               <button @click="open = !open" class="round-btn">
                 <svg class="h-8 w-8 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                </svg>                  
+                </svg>
               </button>
 
               <div x-show="open" @click.outside="open = false" class="bg-white shadow-lg absolute top-15 rounded-lg overflow-hidden">
@@ -123,6 +162,14 @@
               </div>
           </div>
         </div>
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
+=======
+
+>>>>>>> Stashed changes
         @endauth
       </div>
     </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\Dashboardcontroller;
 use Illuminate\Support\Facades\Route;
@@ -33,4 +34,12 @@ Route::middleware('auth')->group(function() {
     Route::delete('/cart/{product_id}', [CartController::class, 'removeFromCart'])->name('removeFromCart');
     Route::patch('/cart/increase/{product_id}', [CartController::class, 'increaseQuantity'])->name('cartIncrease');
     Route::patch('/cart/decrease/{product_id}', [CartController::class, 'decreaseQuantity'])->name('cartDecrease');
+});
+
+Route::middleware('App\Http\Middleware\RoleMiddleware:admin')->group(function() {
+    Route::get('/AdminPanel', [AdminController::class, 'index'])->name('AdminPanel');
+});
+
+Route::middleware('App\Http\Middleware\RoleMiddleware:admin')->group(function() {
+    Route::get('/AdminPanel', [AdminController::class, 'index'])->name('AdminPanel');
 });
