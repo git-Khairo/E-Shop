@@ -1,5 +1,7 @@
 <x-layout>
 
+  <form action="{{ route('showProducts') }}" method="post">
+    @csrf
     <section class="bg-slate-50">
         <div class="max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
           <div class="grid grid-cols-1 gap-y-8 lg:grid-cols-2 lg:items-center lg:gap-x-16">
@@ -13,7 +15,7 @@
               </p>
 
               <a
-                href="#"
+                href="{{ route('products') }}"
                 class="mt-8 inline-block rounded bg-teal-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-teal-700 focus:outline-none focus:ring"
               >
                 View products
@@ -21,9 +23,9 @@
             </div>
 
             <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
-              <a
+              <button
                 class="block rounded-xl border border-gray-100 p-4 shadow-sm hover:border-gray-200 hover:ring-1 hover:ring-gray-200 focus:outline-none focus:ring"
-                href="#"
+                name="category" value="1" onclick="this.form.submit()"
               >
                 <span class="inline-block rounded-lg bg-gray-50 p-3">
                   <svg
@@ -51,11 +53,11 @@
                 <p class="hidden sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
                   Lorem ipsum dolor sit amet consectetur.
                 </p>
-              </a>
+              </button>
 
-              <a
+              <button
                 class="block rounded-xl border border-gray-100 p-4 shadow-sm hover:border-gray-200 hover:ring-1 hover:ring-gray-200 focus:outline-none focus:ring"
-                href="#"
+                name="category" value="2" onclick="this.form.submit()"
               >
                 <span class="inline-block rounded-lg bg-gray-50 p-3">
                   <svg
@@ -83,11 +85,11 @@
                 <p class="hidden sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
                   Lorem ipsum dolor sit amet consectetur.
                 </p>
-              </a>
+              </button>
 
-              <a
+              <button
                 class="block rounded-xl border border-gray-100 p-4 shadow-sm hover:border-gray-200 hover:ring-1 hover:ring-gray-200 focus:outline-none focus:ring"
-                href="#"
+                name="category" value="3" onclick="this.form.submit()"
               >
                 <span class="inline-block rounded-lg bg-gray-50 p-3">
                   <svg
@@ -115,11 +117,11 @@
                 <p class="hidden sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
                   Lorem ipsum dolor sit amet consectetur.
                 </p>
-              </a>
+              </button>
 
-              <a
+              <button
                 class="block rounded-xl border border-gray-100 p-4 shadow-sm hover:border-gray-200 hover:ring-1 hover:ring-gray-200 focus:outline-none focus:ring"
-                href="#"
+                name="category" value="4" onclick="this.form.submit()"
               >
                 <span class="inline-block rounded-lg bg-gray-50 p-3">
                   <svg
@@ -147,11 +149,11 @@
                 <p class="hidden sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
                   Lorem ipsum dolor sit amet consectetur.
                 </p>
-              </a>
+              </button>
 
-              <a
+              <button
                 class="block rounded-xl border border-gray-100 p-4 shadow-sm hover:border-gray-200 hover:ring-1 hover:ring-gray-200 focus:outline-none focus:ring"
-                href="#"
+                name="category" value="5" onclick="this.form.submit()"
               >
                 <span class="inline-block rounded-lg bg-gray-50 p-3">
                   <svg
@@ -179,11 +181,11 @@
                 <p class="hidden sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
                   Lorem ipsum dolor sit amet consectetur.
                 </p>
-              </a>
+              </button>
 
-              <a
+              <button
                 class="block rounded-xl border border-gray-100 p-4 shadow-sm hover:border-gray-200 hover:ring-1 hover:ring-gray-200 focus:outline-none focus:ring"
-                href="#"
+                name="category" value="6" onclick="this.form.submit()"
               >
                 <span class="inline-block rounded-lg bg-gray-50 p-3">
                   <svg
@@ -211,18 +213,19 @@
                 <p class="hidden sm:mt-1 sm:block sm:text-sm sm:text-gray-600">
                   Lorem ipsum dolor sit amet consectetur.
                 </p>
-              </a>
+              </button>
             </div>
           </div>
         </div>
       </section>
+  </form>
 
 
   <section>
     <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
       <ul class="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-3">
         <li>
-          <a href="#" class="group relative block">
+          <a href="{{ route('products') }}" class="group relative block">
             <img
               src="https://images.unsplash.com/photo-1618898909019-010e4e234c55?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
               alt=""
@@ -233,7 +236,7 @@
               <h3 class="text-xl font-medium text-white">Casual Trainers</h3>
 
               <span
-                class="mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white"
+                class="mt-1.5 inline-block bg-teal-600 px-5 py-3 text-xs font-medium uppercase tracking-wide text-white"
               >
                 Shop Now
               </span>
@@ -242,7 +245,7 @@
         </li>
 
         <li>
-          <a href="#" class="group relative block">
+          <a href="{{ route('products') }}" class="group relative block">
             <img
               src="https://images.unsplash.com/photo-1624623278313-a930126a11c3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
               alt=""
@@ -253,7 +256,7 @@
               <h3 class="text-xl font-medium text-white">Winter Jumpers</h3>
 
               <span
-                class="mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white"
+                class="mt-1.5 inline-block bg-teal-600 px-5 py-3 text-xs font-medium uppercase tracking-wide text-white"
               >
                 Shop Now
               </span>
@@ -262,7 +265,7 @@
         </li>
 
         <li class="lg:col-span-2 lg:col-start-2 lg:row-span-2 lg:row-start-1">
-          <a href="#" class="group relative block">
+          <a href="{{ route('products') }}" class="group relative block">
             <img
               src="https://images.unsplash.com/photo-1593795899768-947c4929449d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2672&q=80"
               alt=""
@@ -273,7 +276,7 @@
               <h3 class="text-xl font-medium text-white">Skinny Jeans Blue</h3>
 
               <span
-                class="mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white"
+                class="mt-1.5 inline-block bg-teal-600 px-5 py-3 text-xs font-medium uppercase tracking-wide text-white"
               >
                 Shop Now
               </span>
