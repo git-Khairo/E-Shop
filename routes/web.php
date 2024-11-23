@@ -42,7 +42,3 @@ Route::middleware('auth')->group(function() {
 Route::middleware('App\Http\Middleware\RoleMiddleware:admin')->group(function() {
     Route::get('/AdminPanel', [AdminController::class, 'index'])->name('AdminPanel');
 });
-<<<<<<< HEAD
-=======
-
->>>>>>> fed23bb02cc37d6b3f11114ee85acc523c7a7774
