@@ -117,9 +117,8 @@
                             <p class="title mb-1 mx-1 text-2xl text-teal-600">{{ auth()->user()->username }}</p>
                             @role('admin')
                             <a href="{{ route('AdminPanel') }}" class="text-xl hover:bg-teal-600 hover:text-white py-1 px-2 rounded-lg">Admin Panel</a>
-                            @else
-                            <a href="{{ route('dashboard') }}" class="text-xl hover:bg-teal-600 hover:text-white py-1 px-2 rounded-lg">My Orders</a>
                             @endrole
+                            <a href="{{ route('dashboard') }}" class="text-xl hover:bg-teal-600 hover:text-white py-1 px-2 rounded-lg">My Orders</a>
                             <form action="{{ route('logout') }}" method="post">
                                 @csrf
                                 <button class="text-base hover:bg-teal-600 hover:text-white rounded-lg w-full">Logout</button>

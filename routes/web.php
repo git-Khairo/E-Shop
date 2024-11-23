@@ -39,7 +39,3 @@ Route::middleware('auth')->group(function() {
 Route::middleware('App\Http\Middleware\RoleMiddleware:admin')->group(function() {
     Route::get('/AdminPanel', [AdminController::class, 'index'])->name('AdminPanel');
 });
-
-Route::middleware('App\Http\Middleware\RoleMiddleware:admin')->group(function() {
-    Route::get('/AdminPanel', [AdminController::class, 'index'])->name('AdminPanel');
-});

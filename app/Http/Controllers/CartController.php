@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\orders;
 use App\Models\product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -88,6 +90,31 @@ class CartController extends Controller
     }
 
     public function saveToDatabase(Request $request){
-        dd($request->cart);
+
+        $cart = json_decode($request->cart,true);
+
+        if(!empty($cart)){
+    
+            $processedCart = array_map(function ($item) {
+                return [
+                    'id' => $item['id'],
+                    'quantity' => $item['quantity'],
+                ];
+            }, $cart);
+
+            $order = orders::create([
+                'user_id' => Auth::User()->id,
+                'products' => json_encode($processedCart),
+                'status' => 'pending',
+                'price' => $request->total,
+            ]);
+
+            session()->forget('cart');
+
+            return redirect()->route('home')->with('success', 'Your Payment was Successfully Stored');
+        }
+
+        return redirect()->route('cart')->with('Empty', 'Your Cart is empty, please fill your cart first');
+
     }
 }

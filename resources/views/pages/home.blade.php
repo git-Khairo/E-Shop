@@ -1,5 +1,54 @@
 <x-layout>
 
+
+
+  @if (session('success'))
+  <div id="default-modal" tabindex="-1" aria-hidden="true" 
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
+      data-modal-backdrop="static" data-modal-hide="default-modal">
+      <div class="relative w-full max-w-md bg-white rounded-lg shadow dark:bg-gray-700">
+          <div class="flex items-center justify-between p-4 border-b dark:border-gray-600">
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+                  Success
+              </h3>
+              <button type="button" class="text-gray-400 hover:text-gray-900 dark:hover:text-white" 
+                  data-modal-hide="default-modal">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+              </button>
+          </div>
+          <div class="p-4">
+              <p class="text-sm text-gray-500 dark:text-gray-400">
+                  {{ session('success') }}
+              </p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">
+                Check Your Orders page to view the order's status 
+            </p>
+          </div>
+          <div class="flex justify-end p-4 border-t dark:border-gray-600">
+              <button type="button" 
+                  class="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700"
+                  data-modal-hide="default-modal">Close</button>
+          </div>
+      </div>
+  </div>
+  @endif
+  
+  
+  
+    
+
+
+
+
+
+
+
+
+
+
+
   <form action="{{ route('showProducts') }}" method="post">
     @csrf
     <section class="bg-slate-50">

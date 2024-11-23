@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->json('products');
+            $table->string('status');
+            $table->double('price');
             $table->timestamps();
         });
     }

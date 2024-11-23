@@ -15,13 +15,14 @@ class orders extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'user_id',
+        'products',
+        'status',
+        'price',
+    ];
 
     public function user(){
         return $this->belongsTo(User::class);
-    }
-
-    public function product(){
-        return $this->belongsToMany(product::class);
     }
 }
