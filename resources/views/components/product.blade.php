@@ -1,8 +1,8 @@
-@props(['product'])
+@props(['product','admin'=>false])
 
 <div class="group my-10 flex w-full max-w-xs flex-col overflow-hidden border border-gray-100 bg-white rounded-lg">
     <a class="relative flex h-60 overflow-hidden m-3 rounded-md" href="#">
-      <img class="absolute top-0 right-0 object-cover" src="{{ asset('storage/images/' . $product->image) }}" alt="product image" />
+      <img class="absolute top-0 right-0 object-cover" src="{{ asset('storage/' . $product->image) }}" alt="product image" />
     </a>
     <div class="mt-4 px-5 pb-5">
       <a href="#">
@@ -15,6 +15,7 @@
         </p>
       </div>
       @auth
+      @if(!$admin)
       <form action="{{ route('AddtoCart') }}" method="post">
         @csrf
         <input type="hidden" name="ProductId" value="{{ $product->id }}">
@@ -25,6 +26,16 @@
           Add to cart
         </button>
       </form>
+      @else
+          <div class ="flex items-center justify-end gap-4 mt-6">
+         <a href="{{ route('product.edit', $product->id) }}" class="bg-blue-500 text-white px-4 py-2 text-xs rounded-md">Edit</a>
+         <form action="{{ route('product.destroy', $product->id) }}" method="POST">
+             @csrf
+             @method('DELETE')
+         <button type="submit" class="bg-red-500 text-white px-4 py-2 text-xs rounded-md">Delete</button>
+         </form>
+          </div>
+            @endif
       @endauth
     </div>
   </div>
