@@ -2,7 +2,7 @@
 
 <div class="group my-10 flex w-full max-w-xs flex-col overflow-hidden border border-gray-100 bg-white rounded-lg">
     <a class="relative flex h-60 overflow-hidden m-3 rounded-md" href="#">
-      <img class="absolute top-0 right-0 object-cover" src="{{ asset('storage/' . $product->image) }}" alt="product image" />
+      <img class="absolute top-0 right-0 object-cover" src="{{ asset('storage/images/' . $product->image) }}" alt="product image" />
     </a>
     <div class="mt-4 px-5 pb-5">
       <a href="#">
