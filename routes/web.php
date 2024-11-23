@@ -3,11 +3,14 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\Dashboardcontroller;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 
 Route::view('/', 'pages.home')->name('home');
+
+Route::resource('product',ProductController::class);
 
 Route::middleware('guest')->group(function() {
     Route::view('/login', 'pages.Login')->name('login');
@@ -39,3 +42,7 @@ Route::middleware('auth')->group(function() {
 Route::middleware('App\Http\Middleware\RoleMiddleware:admin')->group(function() {
     Route::get('/AdminPanel', [AdminController::class, 'index'])->name('AdminPanel');
 });
+<<<<<<< HEAD
+=======
+
+>>>>>>> fed23bb02cc37d6b3f11114ee85acc523c7a7774

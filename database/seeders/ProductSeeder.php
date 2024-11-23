@@ -12,8 +12,8 @@ class ProductSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run()
     {
-
+        Product::factory()->count(70)->create();
     }
 }
