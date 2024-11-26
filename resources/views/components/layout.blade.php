@@ -106,23 +106,34 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                         </svg>
                     </a>
-                    <div x-data="{open : false}">
-                        <button @click="open = !open" class="round-btn">
+                    <div>
+                        <button id="dropdownDividerButton" data-dropdown-toggle="dropdownDivider" class="font-medium rounded-lg text-sm py-2.5 text-center inline-flex items-center" type="button">
                             <svg class="h-8 w-8 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                             </svg>
                         </button>
 
-                        <div x-show="open" @click.outside="open = false" class="bg-white shadow-lg absolute top-15 rounded-lg overflow-hidden">
-                            <p class="title mb-1 mx-1 text-2xl text-teal-600">{{ auth()->user()->username }}</p>
-                            @role('admin')
-                            <a href="{{ route('AdminPanel') }}" class="text-xl hover:bg-teal-600 hover:text-white py-1 px-2 rounded-lg">Admin Panel</a>
-                            @endrole
-                            <a href="{{ route('dashboard') }}" class="text-xl hover:bg-teal-600 hover:text-white py-1 px-2 rounded-lg">My Orders</a>
-                            <form action="{{ route('logout') }}" method="post">
-                                @csrf
-                                <button class="text-base hover:bg-teal-600 hover:text-white rounded-lg w-full">Logout</button>
-                            </form>
+                        <div id="dropdownDivider" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-36 dark:bg-gray-700 dark:divide-gray-600">
+                            <ul class="py-2 text-base text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDividerButton">
+                              <li>
+                                <a href="{{ route('dashboard') }}" class="block text-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">My Orders</a>
+                              </li>
+                              <li>
+                                <a href="{{ route('profile') }}" class="block text-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
+                              </li>
+                              <li>
+                                @role('admin')
+                                <a href="{{ route('AdminPanel') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Admin Panel</a>
+                                @endrole
+                              </li>
+                            </ul>
+                            <div class="py-2">
+                                <form action="{{ route('logout') }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="block w-full text-sm px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Logout</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

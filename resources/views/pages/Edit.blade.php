@@ -17,18 +17,14 @@
                 <input type="text" id="amount" name="amount" value="{{ $product->amount }}" class="w-full px-4 py-2 border rounded">
             </div>
             <div class="mb-4">
-                <label for="category" class="block text-gray-700">Category</label>
-                <input type="text" id="category" name="category" value="{{ $category->type }}" class="w-full px-4 py-2 border rounded" placeholder="Enter category name">
-            </div>
-            <div class="mb-4">
                 <label for="image" class="block text-gray-700">Product Image</label>
                 <input type="file" id="image" name="image" class="w-full px-4 py-2 border rounded">
                 <div class="mt-2">
-                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="h-32">
+                    <img src="{{ asset('storage/images/' . $product->image) }}" alt="{{ $product->name }}" class="h-32">
                 </div>
             </div>
             <div class="flex justify-end">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Update</button>
+                <button type="submit" class="bg-yellow-300 text-white px-4 py-2 rounded hover:bg-yellow-400">Update</button>
             </div>
         </form>
     </div>

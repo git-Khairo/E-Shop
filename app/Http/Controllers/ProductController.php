@@ -5,26 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\categories;
 use App\Models\product;
 use Illuminate\Http\Request;
-
-
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('pages.create');
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -48,7 +35,7 @@ class ProductController extends Controller
         }
 
         // Store the uploaded image
-        $imageName = $request->file('image')->store('products', 'public');
+        $imageName = Storage::disk('public')->put('images', $request->image);
 
         // Create the product
         $product = new Product([
@@ -58,19 +45,14 @@ class ProductController extends Controller
             'image' => $imageName,
         ]);
 
-        // Associate the product with the category
         $category->products()->save($product);
 
-        return redirect()->route('showProducts')->with('success', 'Product added successfully.');
+        return redirect()->route('AdminPanelProducts')->with('success', 'Product added successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(product $product)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.

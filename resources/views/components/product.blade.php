@@ -28,11 +28,11 @@
       </form>
       @else
           <div class ="flex items-center justify-end gap-4 mt-6">
-         <a href="{{ route('product.edit', $product->id) }}" class="bg-blue-500 text-white px-4 py-2 text-xs rounded-md">Edit</a>
+         <a href="{{ route('product.edit', $product->id) }}" class="bg-yellow-300 hover:bg-yellow-400 text-white px-4 py-2 text-xs rounded-md">Edit</a>
          <form action="{{ route('product.destroy', $product->id) }}" method="POST">
              @csrf
              @method('DELETE')
-         <button type="submit" class="bg-red-500 text-white px-4 py-2 text-xs rounded-md">Delete</button>
+         <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 text-xs rounded-md">Delete</button>
          </form>
           </div>
             @endif

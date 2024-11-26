@@ -58,7 +58,7 @@ class CartController extends Controller
             CartController::viewCart();
         }
     
-        return redirect()->route('cart');
+        return redirect()->back();
     }
 
     public function decreaseQuantity($productId){
@@ -76,7 +76,7 @@ class CartController extends Controller
             CartController::viewCart();
         }
 
-        return redirect()->route('cart');
+        return redirect()->back();
     }
 
     public function removeFromCart($productId){
