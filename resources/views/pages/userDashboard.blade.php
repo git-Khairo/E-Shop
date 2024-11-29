@@ -13,6 +13,7 @@
                       <option value="all" {{ $option == 'all' ? 'selected' : '' }}>All orders</option>
                       <option value="pending" {{ $option == 'pending' ? 'selected' : '' }}>Pending</option>
                       <option value="confirmed" {{ $option == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                      <option value="cancelled" {{ $option == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                     </select>
                   </form>
                 </div>
