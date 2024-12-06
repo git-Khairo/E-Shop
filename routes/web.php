@@ -44,10 +44,10 @@ Route::middleware('auth')->group(function() {
     Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-// Route::middleware('App\Http\Middleware\RoleMiddleware:admin')->group(function() {
+Route::middleware('App\Http\Middleware\RoleMiddleware:admin')->group(function() {
     Route::get('/AdminPanel', [AdminController::class, 'viewAllOrders'])->name('AdminPanel');
     Route::view('/AdminPanel/Add-Product', 'pages.create')->name('addProduct');
     Route::get('/AdminPanel/products', [AdminController::class, 'viewAllProducts'])->name('AdminPanelProducts');
     Route::post('/AdminPanel/Confirm/{orderId}', [AdminController::class, 'confirmOrder'])->name('Confirm');
     Route::delete('/AdminPanel/Delete/{orderId}', [AdminController::class, 'deleteOrder'])->name('Delete');
-// });
+});
