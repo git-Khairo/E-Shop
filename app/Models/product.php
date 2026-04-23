@@ -4,28 +4,57 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class product extends Model
+/**
+ * Product (canonical, concurrency-aware).
+ *
+ * Concurrency-critical fields:
+ *   - `stock`         : available units
+ *   - `stock_version` : monotonically increasing, used for Optimistic Locking.
+ *     See {@see \App\Services\StockService::decrementOptimistic()}.
+ */
+class Product extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    protected $table = 'products';
+
     protected $fillable = [
+        'sku',
         'name',
+        'slug',
+        'description',
         'price',
         'image',
-        'type',
+        'stock',
+        'stock_version',
+        'is_active',
+        'categories_id',
+        // legacy (kept for backward compatibility with older rows)
         'amount',
-
     ];
 
-    public function category(){
-        return $this->belongsTo(categories::class);
+    protected $casts = [
+        'price'         => 'decimal:2',
+        'stock'         => 'integer',
+        'stock_version' => 'integer',
+        'is_active'     => 'boolean',
+    ];
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(categories::class, 'categories_id');
+    }
+
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function cartItems(): HasMany
+    {
+        return $this->hasMany(CartItem::class);
     }
 }

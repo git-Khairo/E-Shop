@@ -3,21 +3,16 @@
 namespace Database\Seeders;
 
 use App\Models\categories;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class CategoriesSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run()
+    public function run(): void
     {
-        $categories = ['Shirts', 'Pants', 'Jackets', 'Shoes', 'Underwear', 'Accessories'];
+        $types = ['Shirts', 'Pants', 'Jackets', 'Shoes', 'Underwear', 'Accessories'];
 
-        foreach ($categories as $category) {
-            categories::firstOrCreate(['type' => $category]);
+        foreach ($types as $type) {
+            categories::firstOrCreate(['type' => $type]);
         }
     }
 }

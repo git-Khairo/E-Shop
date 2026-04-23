@@ -3,51 +3,34 @@
 namespace Database\Factories;
 
 use App\Models\categories;
-use App\Models\product;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\product>
+ * @extends Factory<Product>
  */
 class ProductFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    protected $model = product::class;
+    protected $model = Product::class;
 
-    public function definition()
+    public function definition(): array
     {
-
-        $productNames = [
-            1 => ['Classic White Shirt', 'Flannel Shirt', 'Denim Shirt', 'Polo Shirt', 'Oxford Shirt'],
-            2 => ['Jeans', 'Chinos', 'Khakis', 'Sweatpants', 'Cargo Pants'],
-            3 => ['Leather Jacket', 'Denim Jacket', 'Bomber Jacket', 'Blazer', 'Windbreaker'],
-            4 => ['Sneakers', 'Boots', 'Loafers', 'Sandals', 'Running Shoes'],
-            5 => ['Boxers', 'Briefs', 'Trunks', 'Bikini', 'Thermal Underwear'],
-            6 => ['Sunglasses', 'Watch', 'Belt', 'Scarf', 'Hat']
-        ];
-        // Fetch the categories from the database
-        $categories = categories::all();
-
-        // Handle the case where no categories are found
-        if ($categories->isEmpty()) {
-            throw new \Exception("No categories found. Please ensure categories are seeded first.");
-        }
-
-        // Select a random category and corresponding product name
-        $category = $categories->random();
-        $categoryName = $category->id;
-        $productName = $this->faker->randomElement($productNames[$categoryName]);
+        $name = $this->faker->words(2, true);
+        $slug = Str::slug($name).'-'.Str::lower(Str::random(4));
 
         return [
-            'name' => $productName,
-            'categories_id' =>  $category->id,
-            'price' => $this->faker->randomFloat(2, 10, 200),
-            'amount' => $this->faker->numberBetween(1, 100),
-            'image' => $this->faker->imageUrl(),
+            'sku'           => strtoupper(Str::random(3)).'-'.strtoupper(Str::random(6)),
+            'name'          => Str::title($name),
+            'slug'          => $slug,
+            'description'   => $this->faker->sentence(12),
+            'price'         => $this->faker->randomFloat(2, 20, 500),
+            'image'         => "https://picsum.photos/seed/{$slug}/800/800",
+            'stock'         => $this->faker->numberBetween(10, 100),
+            'stock_version' => 0,
+            'is_active'     => true,
+            'categories_id' => categories::inRandomOrder()->value('id') ?? categories::factory(),
+            'amount'        => 0,
         ];
     }
 }

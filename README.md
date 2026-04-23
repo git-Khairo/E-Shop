@@ -1,67 +1,245 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# E-Shop — High-Performance E-Commerce (Laravel + React)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A production-grade e-commerce system that showcases modern backend
+architecture AND real parallel-programming practices:
 
-## About Laravel
+- **Clean / Onion architecture** (Controllers → Services → Repositories → Models)
+- **Optimistic *and* pessimistic stock locking** (switch per workload)
+- **ACID checkout** (DB transaction + compensating rollback on payment failure)
+- **Redis distributed cache** with tag-based invalidation
+- **Laravel Queues** for async emails, PDF invoices, daily sales reports
+- **Batch processing** with `chunkById` (safe under concurrent inserts)
+- **Sanctum Bearer-token API** consumed by a modern React frontend
+- **Stress-testing artefacts** (JMeter, Apache Bench, custom artisan simulator)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+For the deep technical write-up see **[DOCUMENTATION.md](./DOCUMENTATION.md)**.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 1. Project layout
 
-## Learning Laravel
+```
+E-Shop/
+├── app/                     # Laravel backend (API v1 + services + jobs)
+├── config/commerce.php      # STOCK_STRATEGY + PAYMENT_DRIVER knobs
+├── database/migrations/     # Schema (with stock_version, order_items, payments)
+├── resources/js/            # React 18 SPA (served via Laravel Vite plugin)
+│   ├── spa.jsx              #   entry point (mounted at /)
+│   ├── App.jsx, components/, pages/, store/, lib/
+├── resources/css/spa.css    # Tailwind entry for the SPA
+├── routes/api.php           # API endpoints under /api/v1/*
+├── stress-tests/            # JMeter plan + ab script
+├── DOCUMENTATION.md         # Architecture, concurrency, benchmarks
+└── README.md                # This file
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 2. Prerequisites
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Tool       | Version | Notes                                        |
+|------------|---------|----------------------------------------------|
+| PHP        | ≥ 8.2   | With `pdo_mysql`, `pcntl`, `redis` or `predis` |
+| Composer   | ≥ 2.5   |                                              |
+| MySQL      | ≥ 5.7   | XAMPP's MySQL works out of the box           |
+| Redis      | ≥ 5     | Optional but recommended                     |
+| Node.js    | ≥ 18    | For the React frontend                       |
+| JMeter     | any     | Optional, for stress tests                   |
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 3. Quick start (5 minutes)
 
-### Premium Partners
+```bash
+# 1. Clone / cd into the project
+cd /Applications/XAMPP/xamppfiles/htdocs/E-Shop
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+# 2. Install PHP deps
+composer install
 
-## Contributing
+# 3. Copy env + generate key
+cp .env.example .env
+php artisan key:generate
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# 4. Configure database + cache in .env
+#    DB_CONNECTION=mysql / DB_DATABASE=eshop etc.
+#    CACHE_STORE=redis   (or "file" if no Redis)
+#    QUEUE_CONNECTION=redis   (or "database")
+#    STOCK_STRATEGY=optimistic   (or "pessimistic")
+#    PAYMENT_DRIVER=mock   (or "stripe" with STRIPE_SECRET=...)
 
-## Code of Conduct
+# 5. Migrate
+php artisan migrate --force
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# 6. Seed a user + some products (see "seeders" section below — optional)
 
-## Security Vulnerabilities
+# 7. Start the API
+php artisan serve           # http://localhost:8000
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# 8. Start queue workers (in 3 separate terminals ideally)
+php artisan queue:work --queue=emails   --tries=5
+php artisan queue:work --queue=invoices --tries=3
+php artisan queue:work --queue=reports  --tries=2
 
-## License
+# 9. Build or dev-serve the React SPA (served by Laravel Vite plugin)
+npm install
+npm run dev                 # hot-reload dev server
+# or, for production bundle:
+npm run build
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# E-Shop
+Open **http://localhost:8000**, register, browse products, add to cart, checkout.
+
+> The React SPA is the ONLY frontend — Blade views have been removed.
+> Laravel's `web.php` has a single catch-all route (`/{any?}` excluding `/api/*`)
+> that returns `resources/views/spa.blade.php`; React Router takes over from there.
+
+---
+
+## 4. Seeding test data (tinker one-liner)
+
+```bash
+php artisan tinker --execute="
+  App\Models\categories::firstOrCreate(['name' => 'Electronics']);
+  for (\$i = 1; \$i <= 20; \$i++) {
+    App\Models\Product::create([
+      'name' => 'Product '.\$i,
+      'slug' => 'product-'.\$i,
+      'description' => 'Auto-seeded item #'.\$i,
+      'price' => random_int(10, 500) + 0.99,
+      'image' => '',
+      'stock' => random_int(5, 100),
+      'stock_version' => 0,
+      'is_active' => true,
+      'categories_id' => 1,
+      'amount' => 0,
+    ]);
+  }
+"
+```
+
+Register a user via the frontend or with:
+
+```bash
+curl -X POST http://localhost:8000/api/v1/auth/register \
+  -H 'Content-Type: application/json' \
+  -d '{"username":"alice","email":"alice@test.com","password":"secret123","password_confirmation":"secret123"}'
+```
+
+The response contains a `token` — use it as `Authorization: Bearer <token>` for
+protected endpoints.
+
+---
+
+## 5. Key commands cheat-sheet
+
+```bash
+# Boot up everything (Laravel dev helper already present in composer.json):
+composer dev       # runs server + queue + logs + vite concurrently
+
+# Concurrency proof — prevents overselling under 200 concurrent buyers
+php artisan commerce:simulate-orders --product=1 --stock=50 --buyers=200
+
+# Benchmark the catalog with/without Redis
+php artisan commerce:benchmark --runs=200
+
+# Dispatch today's sales report (batch job)
+php artisan commerce:daily-report --date=2026-04-22
+
+# Inspect failed jobs
+php artisan queue:failed
+
+# Tail logs
+php artisan pail
+```
+
+---
+
+## 6. Stress testing
+
+### Option A — Artisan (best for correctness proof)
+
+```bash
+php artisan commerce:simulate-orders --buyers=200 --stock=50
+```
+
+Forks 200 OS processes that each hit `OrderService::checkout()` against the
+same product. Prints an invariant check proving no overselling occurred.
+
+### Option B — Apache Bench (smoke test)
+
+```bash
+./stress-tests/ab-benchmark.sh
+```
+
+### Option C — JMeter (100+ concurrent HTTP users)
+
+```bash
+# 1. Get a Sanctum token via /api/v1/auth/login
+# 2. Open stress-tests/checkout.jmx in JMeter and edit the TOKEN user variable
+# 3. Run: hits POST /api/v1/checkout at 100 threads for 30 seconds
+```
+
+See `DOCUMENTATION.md §6` for interpretation.
+
+---
+
+## 7. Switching strategies
+
+The system is designed so the two biggest operational decisions are just
+env-var toggles:
+
+```env
+# Stock concurrency
+STOCK_STRATEGY=optimistic     # (default) versioned UPDATE + retries — high throughput
+STOCK_STRATEGY=pessimistic    # SELECT FOR UPDATE — serializes writers per row
+
+# Payment provider
+PAYMENT_DRIVER=mock           # deterministic, for tests/load
+PAYMENT_DRIVER=stripe         # real Stripe (set STRIPE_SECRET=sk_test_...)
+```
+
+---
+
+## 8. API reference (summary)
+
+| Method | Path                        | Auth | Purpose                               |
+|--------|-----------------------------|------|---------------------------------------|
+| POST   | `/api/v1/auth/register`     | ❌   | Register user + return token          |
+| POST   | `/api/v1/auth/login`        | ❌   | Login + return token                  |
+| POST   | `/api/v1/auth/logout`       | ✅   | Revoke current token                  |
+| GET    | `/api/v1/auth/me`           | ✅   | Current user                          |
+| GET    | `/api/v1/products`          | ❌   | List (filter/paginate, cached)        |
+| GET    | `/api/v1/products/{id}`     | ❌   | Single product (cached)               |
+| GET    | `/api/v1/categories`        | ❌   | Category list with product counts     |
+| POST   | `/api/v1/contact`           | ❌   | Contact form submission               |
+| GET    | `/api/v1/cart`              | ✅   | Current cart                          |
+| POST   | `/api/v1/cart`              | ✅   | Add item (atomic upsert)              |
+| DELETE | `/api/v1/cart`              | ✅   | Clear cart                            |
+| DELETE | `/api/v1/cart/{productId}`  | ✅   | Remove one line                       |
+| POST   | `/api/v1/checkout`          | ✅   | ACID checkout (rate-limited 10/min)   |
+| GET    | `/api/v1/orders`            | ✅   | User's orders                         |
+| GET    | `/api/v1/orders/{id}`       | ✅   | One order with items + payment        |
+
+Rate limits live in `bootstrap/app.php`:
+- global API: **60 req/min** per user/IP
+- checkout:  **10 req/min** per user
+
+---
+
+## 9. Troubleshooting
+
+| Symptom                                       | Fix                                                           |
+|-----------------------------------------------|---------------------------------------------------------------|
+| `CACHE tags not supported on file driver`     | Set `CACHE_STORE=redis` (or just don't use tag flushing)      |
+| `pcntl not available` in simulator            | Enable `pcntl` PHP extension, or re-run it serially           |
+| CORS blocked in browser                       | Check `config/cors.php` — add your frontend origin            |
+| "Database is locked" on SQLite                | Don't use SQLite for concurrency tests; use MySQL             |
+| Queues aren't processing                      | Start `php artisan queue:work`                                |
+| Stripe errors                                 | Use `PAYMENT_DRIVER=mock` while developing                    |
+
+---
+
+## 10. Credits / License
+
+MIT. Built on top of Laravel 11 and React 18.
