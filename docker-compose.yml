@@ -1,0 +1,174 @@
+###############################################################################
+# E-Shop — High-Performance E-Commerce Backend Engine
+# Docker Compose for Parallel Programming Project
+#
+# Architecture:
+#   ┌─────────┐     ┌──────────┐   ┌──────────┐   ┌──────────┐
+#   │  Nginx  │────▶│ PHP-FPM  │   │ PHP-FPM  │   │ PHP-FPM  │
+#   │  (LB)   │────▶│ Worker 1 │   │ Worker 2 │   │ Worker 3 │
+#   │ :8080   │────▶│  :9000   │   │  :9000   │   │  :9000   │
+#   └─────────┘     └──────────┘   └──────────┘   └──────────┘
+#        │                │              │              │
+#        │          ┌─────┴──────────────┴──────────────┘
+#        │          │
+#   ┌────┴────┐  ┌──┴───┐  ┌────────────┐  ┌──────────────┐
+#   │ MySQL   │  │Redis │  │Queue Worker│  │Queue Worker  │
+#   │ :3306   │  │:6379 │  │ (emails)   │  │ (invoices)   │
+#   └─────────┘  └──────┘  └────────────┘  └──────────────┘
+#
+# REQ 5 (Load Distribution): Nginx distributes across 3 PHP-FPM backends
+# REQ 2 (Resource Management): PHP-FPM pm.max_children limits worker processes
+# REQ 3 (Async Queues): Separate queue worker containers for each queue
+###############################################################################
+
+services:
+
+  # ── Nginx Load Balancer (Req 5) ──────────────────────────────────
+  nginx:
+    image: nginx:1.25-alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./public:/var/www/html/public:ro
+    depends_on:
+      - app1
+      - app2
+      - app3
+    networks:
+      - eshop
+
+  # ── PHP-FPM Application Servers (x3 for load distribution) ──────
+  app1:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    volumes:
+      - .:/var/www/html
+    environment:
+      - APP_SERVER_ID=server-1
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - eshop
+
+  app2:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    volumes:
+      - .:/var/www/html
+    environment:
+      - APP_SERVER_ID=server-2
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - eshop
+
+  app3:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    volumes:
+      - .:/var/www/html
+    environment:
+      - APP_SERVER_ID=server-3
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - eshop
+
+  # ── Queue Workers (Req 3: Async Processing) ────────────────────
+  queue-emails:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    command: php artisan queue:work --queue=emails --max-jobs=500 --sleep=3 --tries=5
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - eshop
+
+  queue-invoices:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    command: php artisan queue:work --queue=invoices --max-jobs=200 --sleep=3 --tries=3
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - eshop
+
+  queue-reports:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    command: php artisan queue:work --queue=reports --max-jobs=50 --sleep=10 --tries=2 --timeout=600
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - eshop
+
+  # ── MySQL Database ──────────────────────────────────────────────
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: eshop
+      MYSQL_USER: eshop
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - eshop
+
+  # ── Redis (Req 6: Caching + Semaphore for Req 2) ───────────────
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - eshop
+
+volumes:
+  mysql_data:
+
+networks:
+  eshop:
+    driver: bridge

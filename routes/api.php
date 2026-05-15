@@ -4,8 +4,10 @@ use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CartController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ContactController;
+use App\Http\Controllers\Api\V1\MonitorController;
 use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\ProductController;
+use App\Http\Controllers\Api\V1\WalletController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,10 +45,21 @@ Route::prefix('v1')->group(function () {
 
         Route::get('orders',           [OrderController::class, 'index']);
         Route::get('orders/{orderId}', [OrderController::class, 'show']);
+
+        // Wallet endpoints
+        Route::get('wallet',               [WalletController::class, 'show']);
+        Route::post('wallet/credit',       [WalletController::class, 'credit']);
+        Route::post('wallet/debit',        [WalletController::class, 'debit']);
+        Route::post('wallet/transfer',     [WalletController::class, 'transfer']);
+        Route::get('wallet/transactions',  [WalletController::class, 'transactions']);
     });
 
-    // Checkout has its own tighter rate limit and per-user key.
-    Route::middleware(['auth:sanctum', 'throttle:checkout'])->group(function () {
+    // Monitoring dashboard (public for demo purposes; protect in production)
+    Route::get('monitor/dashboard', [MonitorController::class, 'dashboard']);
+
+    // Checkout has its own tighter rate limit, per-user key, AND concurrency semaphore.
+    // The concurrency:checkout,10 middleware limits to 10 simultaneous checkouts system-wide (Req 2).
+    Route::middleware(['auth:sanctum', 'concurrency:checkout,10'])->group(function () {
         Route::post('checkout', [OrderController::class, 'checkout']);
     });
 });
