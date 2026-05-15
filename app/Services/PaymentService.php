@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\PaymentFailedException;
 use App\Models\Order;
 use App\Models\Payment;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
@@ -33,8 +34,54 @@ class PaymentService
     {
         return match ($this->driver) {
             'stripe' => $this->chargeStripe($order, $paymentMethodToken),
+            'wallet' => $this->chargeWallet($order),
             default  => $this->chargeMock($order, $paymentMethodToken),
         };
+    }
+
+    /**
+     * Charge via internal wallet — uses WalletService with optimistic locking.
+     * Concurrency-safe: the debit operation uses versioned UPDATE to prevent double-spend.
+     */
+    private function chargeWallet(Order $order): Payment
+    {
+        /** @var WalletService $walletService */
+        $walletService = App::make(WalletService::class);
+
+        try {
+            $tx = $walletService->debit(
+                $order->user_id,
+                (float) $order->total,
+                "Payment for order {$order->reference}",
+                $order->reference,
+                ['order_id' => $order->id],
+            );
+
+            return Payment::create([
+                'order_id'           => $order->id,
+                'provider'           => 'wallet',
+                'provider_reference' => "wallet_tx_{$tx->id}",
+                'amount'             => $order->total,
+                'currency'           => 'USD',
+                'status'             => 'succeeded',
+                'meta'               => [
+                    'wallet_transaction_id' => $tx->id,
+                    'balance_after'         => $tx->balance_after,
+                ],
+            ]);
+        } catch (\RuntimeException $e) {
+            Payment::create([
+                'order_id'           => $order->id,
+                'provider'           => 'wallet',
+                'provider_reference' => null,
+                'amount'             => $order->total,
+                'currency'           => 'USD',
+                'status'             => 'failed',
+                'meta'               => ['error' => $e->getMessage()],
+            ]);
+
+            throw new PaymentFailedException("Wallet payment failed: {$e->getMessage()}", 0, $e);
+        }
     }
 
     /**

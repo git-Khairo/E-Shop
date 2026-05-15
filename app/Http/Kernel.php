@@ -51,5 +51,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'role' => \App\Http\Middleware\RoleMiddleware::class, // Custom middleware
+        'concurrency' => \App\Http\Middleware\ConcurrencyLimiter::class, // Req 2: Semaphore
     ];
 }

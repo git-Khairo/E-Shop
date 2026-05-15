@@ -21,4 +21,14 @@ return [
     | "mock"   — deterministic mock used for tests & load simulations.
     */
     'payment_driver' => env('PAYMENT_DRIVER', 'mock'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Load Balancer Configuration (Requirement 5)
+    |--------------------------------------------------------------------------
+    */
+    'load_balancer' => [
+        'strategy' => env('LB_STRATEGY', 'round_robin'), // round_robin | weighted_round_robin | least_connections
+        'servers'  => null, // null = use default (3 servers). Override with array of server configs.
+    ],
 ];
