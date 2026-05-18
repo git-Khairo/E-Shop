@@ -7,25 +7,12 @@ use App\Services\WalletService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-/**
- * WalletController — REST API for wallet operations.
- *
- * Endpoints:
- *   GET    /api/v1/wallet           → balance + recent transactions
- *   POST   /api/v1/wallet/credit    → add funds (top-up)
- *   POST   /api/v1/wallet/debit     → spend funds (manual debit)
- *   POST   /api/v1/wallet/transfer  → transfer to another user
- *   GET    /api/v1/wallet/transactions → paginated transaction history
- */
 class WalletController extends Controller
 {
     public function __construct(
         private readonly WalletService $walletService,
     ) {}
 
-    /**
-     * GET /api/v1/wallet — current balance + last 5 transactions.
-     */
     public function show(Request $request): JsonResponse
     {
         $wallet = $this->walletService->getOrCreate($request->user()->id);
@@ -40,9 +27,6 @@ class WalletController extends Controller
         ]);
     }
 
-    /**
-     * POST /api/v1/wallet/credit — add funds.
-     */
     public function credit(Request $request): JsonResponse
     {
         $request->validate([
@@ -67,9 +51,6 @@ class WalletController extends Controller
         }
     }
 
-    /**
-     * POST /api/v1/wallet/debit — spend funds.
-     */
     public function debit(Request $request): JsonResponse
     {
         $request->validate([
@@ -96,9 +77,6 @@ class WalletController extends Controller
         }
     }
 
-    /**
-     * POST /api/v1/wallet/transfer — transfer to another user.
-     */
     public function transfer(Request $request): JsonResponse
     {
         $request->validate([
@@ -125,9 +103,6 @@ class WalletController extends Controller
         }
     }
 
-    /**
-     * GET /api/v1/wallet/transactions — paginated history.
-     */
     public function transactions(Request $request): JsonResponse
     {
         $transactions = $this->walletService->getTransactions(

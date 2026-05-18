@@ -11,8 +11,7 @@ class CategoryController extends Controller
 {
     public function index(): JsonResponse
     {
-        // Category list is a textbook candidate for aggressive caching —
-        // read-heavy, mutation-rare. 10 minute TTL is safe.
+
         $data = Cache::remember('categories:all', 600, function () {
             return categories::query()
                 ->withCount('products')

@@ -1,10 +1,5 @@
 import axios from 'axios';
 
-/**
- * Central HTTP client.
- * - Reads bearer token from localStorage on every request.
- * - Auto-logs-out on 401 by clearing the token.
- */
 const api = axios.create({
   baseURL: '/api/v1',
   headers: { Accept: 'application/json' },

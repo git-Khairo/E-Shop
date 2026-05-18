@@ -4,15 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Upgrade the products table to support concurrency-safe stock handling.
- *
- *  - `stock` replaces the legacy `amount` column and is guarded with a NON-NEGATIVE check.
- *  - `stock_version` is a classic Optimistic Concurrency Control (OCC) version number.
- *    Every UPDATE that modifies `stock` MUST include `WHERE stock_version = :v`
- *    and bump it by 1. If two transactions race, only one wins.
- *  - `sku`, `description`, `slug` give us a real product model.
- */
 return new class extends Migration
 {
     public function up(): void
@@ -38,7 +29,6 @@ return new class extends Migration
             }
         });
 
-        // Backfill `stock` from the legacy `amount` column if it still exists.
         if (Schema::hasColumn('products', 'amount')) {
             \DB::statement('UPDATE products SET stock = amount WHERE stock = 0');
         }

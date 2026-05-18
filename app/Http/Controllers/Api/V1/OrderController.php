@@ -50,7 +50,6 @@ class OrderController extends Controller
     {
         $userId = $request->user()->id;
 
-        // If no items passed, build them from the DB cart.
         $items = $request->input('items');
         if (empty($items)) {
             $items = $this->carts->forUser($userId)->map(fn ($ci) => [

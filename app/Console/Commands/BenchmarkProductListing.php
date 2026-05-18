@@ -7,18 +7,6 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
-/**
- * BENCHMARK — demonstrates the bottleneck before/after Redis caching.
- *
- *   php artisan commerce:benchmark
- *
- * Phase A: runs the product list N times with the cache FLUSHED before each call.
- *          -> DB is hit every single time (baseline).
- * Phase B: runs the product list N times with caching enabled.
- *          -> First call warms the cache, subsequent calls hit Redis.
- *
- * The terminal prints average latency + DB query counts for each phase.
- */
 class BenchmarkProductListing extends Command
 {
     protected $signature = 'commerce:benchmark {--runs=100}';
@@ -29,7 +17,6 @@ class BenchmarkProductListing extends Command
         $runs = (int) $this->option('runs');
         $this->info("Running {$runs} iterations per phase...");
 
-        // --- Phase A: NO cache ---
         $queriesA = 0;
         DB::listen(function () use (&$queriesA) { $queriesA++; });
 
@@ -40,9 +27,8 @@ class BenchmarkProductListing extends Command
         }
         $elapsedA = microtime(true) - $startA;
 
-        // --- Phase B: cache warm ---
         Cache::flush();
-        $service->list([], 20); // warm
+        $service->list([], 20);
 
         $queriesB = 0;
         DB::listen(function () use (&$queriesB) { $queriesB++; });

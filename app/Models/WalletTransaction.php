@@ -5,13 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * WalletTransaction — immutable ledger entry.
- *
- * Every wallet operation (credit, debit, transfer, refund) creates a
- * transaction record. This provides a full audit trail and enables
- * reconciliation: sum(credits) - sum(debits) MUST equal current balance.
- */
 class WalletTransaction extends Model
 {
     protected $fillable = [

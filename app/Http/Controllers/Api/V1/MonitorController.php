@@ -15,23 +15,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
 
-/**
- * MonitorController — real-time system monitoring dashboard API.
- *
- * This replaces Grafana with a lightweight, purpose-built dashboard
- * that is tailored to verify all 5 parallel programming requirements.
- *
- * Endpoint: GET /api/v1/monitor/dashboard
- *
- * Each section maps directly to a project requirement:
- *   - req1_concurrency: Race condition metrics (stock integrity)
- *   - req2_resources:   Semaphore usage, active slots
- *   - req3_queues:      Queue depths, job throughput
- *   - req4_batch:       Batch processing status, reports generated
- *   - req5_load:        Load distribution across servers
- *   - wallet:           Wallet system health
- *   - system:           General system metrics
- */
 class MonitorController extends Controller
 {
     public function __construct(
@@ -39,9 +22,6 @@ class MonitorController extends Controller
         private readonly WalletService $walletService,
     ) {}
 
-    /**
-     * GET /api/v1/monitor/dashboard — full monitoring snapshot.
-     */
     public function dashboard(): JsonResponse
     {
         return response()->json([
@@ -57,22 +37,15 @@ class MonitorController extends Controller
         ]);
     }
 
-    /**
-     * REQ 1: Concurrent Access & Data Integrity
-     * Monitors stock integrity and optimistic lock metrics.
-     */
     private function req1ConcurrencyMetrics(): array
     {
-        // Check for negative stock (data corruption indicator)
         $negativeStockCount = Product::where('stock', '<', 0)->count();
 
-        // Products with high version numbers = high contention
         $hotProducts = Product::orderByDesc('stock_version')
             ->take(5)
             ->get(['id', 'name', 'stock', 'stock_version'])
             ->toArray();
 
-        // Total successful orders vs rejected (from payment failures)
         $orderStats = Order::selectRaw("
             COUNT(*) as total,
             SUM(CASE WHEN status = 'confirmed' THEN 1 ELSE 0 END) as confirmed,
@@ -94,10 +67,6 @@ class MonitorController extends Controller
         ];
     }
 
-    /**
-     * REQ 2: Resource Management & Capacity Control
-     * Monitors semaphore slots and rate limiting.
-     */
     private function req2ResourceMetrics(): array
     {
         return [
@@ -116,10 +85,6 @@ class MonitorController extends Controller
         ];
     }
 
-    /**
-     * REQ 3: Asynchronous Queues
-     * Monitors queue depths and job processing.
-     */
     private function req3QueueMetrics(): array
     {
         $queueNames = ['emails', 'invoices', 'reports', 'default'];
@@ -151,18 +116,13 @@ class MonitorController extends Controller
         ];
     }
 
-    /**
-     * REQ 4: Batch Processing
-     * Monitors daily sales report generation.
-     */
     private function req4BatchMetrics(): array
     {
-        // Check for generated reports
         $reportsDir = storage_path('app/reports');
         $reports = [];
         if (is_dir($reportsDir)) {
             $files = glob($reportsDir . '/sales-*.csv');
-            foreach (array_slice($files, -5) as $file) { // last 5
+            foreach (array_slice($files, -5) as $file) {
                 $reports[] = [
                     'file'     => basename($file),
                     'size'     => filesize($file),
@@ -171,7 +131,6 @@ class MonitorController extends Controller
             }
         }
 
-        // Orders available for today's report
         $todayOrders = Order::whereDate('created_at', today())
             ->where('payment_status', 'paid')
             ->count();
@@ -185,10 +144,6 @@ class MonitorController extends Controller
         ];
     }
 
-    /**
-     * REQ 5: Load Distribution
-     * Monitors server distribution stats.
-     */
     private function req5LoadMetrics(): array
     {
         return [
@@ -200,17 +155,11 @@ class MonitorController extends Controller
         ];
     }
 
-    /**
-     * Wallet System metrics.
-     */
     private function walletMetrics(): array
     {
         return $this->walletService->getSystemStats();
     }
 
-    /**
-     * General system metrics.
-     */
     private function systemMetrics(): array
     {
         return [
@@ -225,9 +174,6 @@ class MonitorController extends Controller
         ];
     }
 
-    /**
-     * Health check — green/red per requirement.
-     */
     private function healthCheck(): array
     {
         $negStock = Product::where('stock', '<', 0)->count();

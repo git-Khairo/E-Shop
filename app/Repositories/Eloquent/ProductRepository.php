@@ -54,28 +54,11 @@ class ProductRepository implements ProductRepositoryInterface
         return Product::query()->where('slug', $slug)->first();
     }
 
-    /**
-     * Pessimistic lock. MUST be called inside a transaction.
-     *
-     * Uses `SELECT ... FOR UPDATE` which tells the DB engine:
-     *  "Block any other transaction that wants to write this row until I COMMIT/ROLLBACK."
-     *
-     * This is the simplest way to serialize concurrent stock updates; the downside
-     * is throughput — every concurrent buyer of the same SKU queues up.
-     */
     public function lockForUpdate(int $id): ?Product
     {
         return Product::query()->whereKey($id)->lockForUpdate()->first();
     }
 
-    /**
-     * Optimistic Concurrency Control (OCC) — NO row lock is held between read and write.
-     *
-     * The UPDATE is atomic at the DB level: it only succeeds if the version we
-     * read is still the current one AND stock is still large enough. This is
-     * much more scalable than pessimistic locking under high contention
-     * because the DB never blocks; conflicts are detected and retried instead.
-     */
     public function optimisticDecrementStock(int $productId, int $qty, int $expectedVersion): bool
     {
         $affected = DB::table('products')

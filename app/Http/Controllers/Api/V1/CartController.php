@@ -28,14 +28,6 @@ class CartController extends Controller
         ]);
     }
 
-    /**
-     * Add-to-cart: increments the cart line by {quantity}.
-     *
-     * Stock safety: The quantity requested is capped by the current product stock
-     * at request time, but the authoritative stock reservation happens later
-     * during checkout inside a DB transaction with row locking
-     * ({@see \App\Services\StockService}). Cart is advisory; checkout is binding.
-     */
     public function add(AddToCartRequest $request): JsonResponse
     {
         $product = $this->products->findById($request->integer('product_id'));
@@ -63,11 +55,6 @@ class CartController extends Controller
         return response()->json(['message' => 'Added to cart.'], 201);
     }
 
-    /**
-     * Set a cart line's quantity to an exact value (PATCH). Idempotent —
-     * submitting the same final quantity twice is a no-op, which avoids
-     * double-commit bugs from flaky networks or impatient users.
-     */
     public function update(UpdateCartItemRequest $request, int $productId): JsonResponse
     {
         $product = $this->products->findById($productId);

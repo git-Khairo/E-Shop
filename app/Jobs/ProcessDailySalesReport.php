@@ -12,19 +12,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-/**
- * BATCH PROCESSING demonstration.
- *
- * Aggregates all confirmed orders for a given day into a CSV using `chunkById`.
- * `chunkById` is critical: it streams the result set in fixed-size windows
- * (memory-safe for MILLIONS of rows) AND is insertion-resilient because it
- * paginates by primary key instead of OFFSET.
- *
- * Compare:
- *   all()    -> O(N) memory — dies at ~100k rows
- *   chunk()  -> uses LIMIT/OFFSET — breaks if rows are inserted mid-scan
- *   chunkById -> uses WHERE id > last — safe under concurrent inserts ✓
- */
 class ProcessDailySalesReport implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -48,7 +35,6 @@ class ProcessDailySalesReport implements ShouldQueue
         $totalRows   = 0;
         $grandTotal  = 0.0;
 
-        // CHUNK 500 at a time — constant memory, constant throughput.
         Order::query()
             ->where('created_at', '>=', $day)
             ->where('created_at', '<',  $day->copy()->addDay())

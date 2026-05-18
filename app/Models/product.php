@@ -7,14 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-/**
- * Product (canonical, concurrency-aware).
- *
- * Concurrency-critical fields:
- *   - `stock`         : available units
- *   - `stock_version` : monotonically increasing, used for Optimistic Locking.
- *     See {@see \App\Services\StockService::decrementOptimistic()}.
- */
 class Product extends Model
 {
     use HasFactory;
@@ -32,7 +24,7 @@ class Product extends Model
         'stock_version',
         'is_active',
         'categories_id',
-        // legacy (kept for backward compatibility with older rows)
+
         'amount',
     ];
 

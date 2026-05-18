@@ -5,18 +5,6 @@ namespace App\Console\Commands;
 use App\Services\LoadBalancerService;
 use Illuminate\Console\Command;
 
-/**
- * REQUIREMENT 5: Load Distribution — interactive demonstration.
- *
- * Usage:
- *   php artisan commerce:simulate-lb --requests=1000 --strategy=round_robin
- *   php artisan commerce:simulate-lb --requests=1000 --strategy=weighted_round_robin
- *   php artisan commerce:simulate-lb --requests=1000 --strategy=least_connections
- *   php artisan commerce:simulate-lb --requests=1000 --strategy=all   (compare all three)
- *
- * Output: a distribution table showing how many requests each server received
- *         under each strategy, plus timing data.
- */
 class SimulateLoadBalancer extends Command
 {
     protected $signature = 'commerce:simulate-lb
@@ -53,16 +41,13 @@ class SimulateLoadBalancer extends Command
                 $server = $lb->selectServer($strat);
                 $distribution[$server['id']]++;
 
-                // For least_connections: simulate variable processing time
                 if ($strat === 'least_connections') {
-                    // Simulate: some requests finish fast, some slow
                     if (random_int(1, 3) === 1) {
                         $lb->releaseConnection($server['id']);
                     }
                 }
             }
 
-            // Release remaining connections for least_connections
             if ($strat === 'least_connections') {
                 foreach ($lb->getServers() as $s) {
                     $lb->releaseConnection($s['id']);
@@ -96,7 +81,6 @@ class SimulateLoadBalancer extends Command
             $this->newLine();
         }
 
-        // Comparison summary if running all strategies
         if (count($strategies) > 1) {
             $this->info('=== COMPARISON SUMMARY ===');
             $compRows = [];

@@ -17,12 +17,12 @@ class Order extends Model
     protected $fillable = [
         'reference',
         'user_id',
-        'products',       // kept for backward-compat with the legacy JSON column
-        'status',         // pending | confirmed | cancelled | shipped | delivered
-        'payment_status', // pending | paid | failed | refunded
+        'products',
+        'status',
+        'payment_status',
         'subtotal',
         'total',
-        'price',          // legacy
+        'price',
     ];
 
     protected $casts = [

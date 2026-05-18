@@ -8,13 +8,13 @@ use Illuminate\Validation\ValidationException;
 
 class AuthService
 {
-    /** @return array{user: User, token: string} */
+
     public function register(array $data): array
     {
         $user = User::create([
             'username' => $data['username'],
             'email'    => $data['email'],
-            'password' => $data['password'], // cast to 'hashed' in the model
+            'password' => $data['password'],
         ]);
 
         return [
@@ -23,7 +23,6 @@ class AuthService
         ];
     }
 
-    /** @return array{user: User, token: string} */
     public function login(array $data): array
     {
         $user = User::where('email', $data['email'])->first();

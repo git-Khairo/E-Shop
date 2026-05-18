@@ -9,11 +9,7 @@ use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
 {
-    /**
-     * Seed ~30 realistic products across the six core categories.
-     * Each product gets a stable SKU, a slug, a stock buffer, and a
-     * deterministic Unsplash-style image so the UI always looks polished.
-     */
+
     public function run(): void
     {
         $byCategory = [
@@ -69,7 +65,6 @@ class ProductSeeder extends Seeder
                 $slug = Str::slug($p['name']);
                 $sku  = strtoupper(Str::substr($categoryName, 0, 3)).'-'.Str::upper(Str::random(6));
 
-                // Deterministic, clean-looking placeholder image per product.
                 $image = "https://picsum.photos/seed/{$slug}/800/800";
 
                 Product::updateOrCreate(

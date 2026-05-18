@@ -11,21 +11,6 @@ use App\Models\User;
 use App\Services\OrderService;
 use Illuminate\Console\Command;
 
-/**
- * LOAD SIMULATION — proves the concurrency logic actually prevents overselling.
- *
- * Usage:
- *   php artisan commerce:simulate-orders --product=1 --stock=50 --buyers=200 --qty=1
- *
- * The command will:
- *   1. Reset the product stock to --stock
- *   2. Fork --buyers pcntl processes (or run sequentially if pcntl not available),
- *      each attempting to buy --qty units concurrently.
- *   3. Print a report: successful orders, stock-out rejections, final stock.
- *
- * Invariant: successful_orders * qty + final_stock === initial_stock.
- * If this invariant ever fails -> there is a concurrency bug.
- */
 class SimulateConcurrentOrders extends Command
 {
     protected $signature = 'commerce:simulate-orders
@@ -124,15 +109,13 @@ class SimulateConcurrentOrders extends Command
             $pid = pcntl_fork();
 
             if ($pid === 0) {
-                // CHILD
-                socket_close($sockets[0]);
+                    socket_close($sockets[0]);
                 [$s, $o, $x] = $this->placeOne($service, $userId, $productId, $qty);
                 socket_write($sockets[1], "{$s},{$o},{$x}", 32);
                 socket_close($sockets[1]);
                 exit(0);
             }
 
-            // PARENT
             socket_close($sockets[1]);
             $children[] = $pid;
             $pipes[]    = $sockets[0];

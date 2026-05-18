@@ -9,11 +9,6 @@ use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
 {
-    /**
-     * Accept a contact-form submission.
-     * In production this would dispatch a queued job to email/CRM;
-     * here we validate + log + return 201. Rate-limited by the route group.
-     */
     public function store(Request $request): JsonResponse
     {
         $data = $request->validate([

@@ -6,14 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-/**
- * Wallet — each user has exactly one wallet.
- *
- * Concurrency-critical fields:
- *   - `balance` : current funds available
- *   - `version` : monotonically increasing, used for optimistic locking
- *     (same pattern as Product::stock_version — see StockService).
- */
 class Wallet extends Model
 {
     protected $fillable = [

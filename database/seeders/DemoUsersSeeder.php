@@ -5,12 +5,6 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-/**
- * Demo accounts for local testing. Safe to re-run (idempotent).
- *
- *   admin@eshop.local    / password   (role: admin if Spatie roles are seeded)
- *   customer@eshop.local / password   (regular customer)
- */
 class DemoUsersSeeder extends Seeder
 {
     public function run(): void
@@ -27,7 +21,7 @@ class DemoUsersSeeder extends Seeder
             try {
                 $admin->assignRole('admin');
             } catch (\Throwable) {
-                // roles table may not exist yet; safe to ignore
+
             }
         }
 

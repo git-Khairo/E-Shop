@@ -1,6 +1,5 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 
-/** @type {import('tailwindcss').Config} */
 export default {
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
@@ -35,7 +34,7 @@ export default {
                     950: '#0b1220',
                 },
                 accent: {
-                    500: '#b38b5a',   // warm bronze — for refined accents
+                    500: '#b38b5a',
                     600: '#9a7548',
                 },
             },

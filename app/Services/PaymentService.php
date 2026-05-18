@@ -11,18 +11,6 @@ use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
 use Stripe\StripeClient;
 
-/**
- * PaymentService — either real Stripe or a deterministic mock used in tests
- * and load simulations. The interface stays the same.
- *
- * Note: payment is the ONE step that must not be retried blindly inside a DB
- * transaction (network calls + idempotency). The OrderService therefore:
- *   1) opens a transaction,
- *   2) reserves stock + creates order rows,
- *   3) COMMITS,
- *   4) then calls the payment provider,
- *   5) on failure, compensates by incrementing stock back + marks order failed.
- */
 class PaymentService
 {
     public function __construct(
@@ -39,13 +27,9 @@ class PaymentService
         };
     }
 
-    /**
-     * Charge via internal wallet — uses WalletService with optimistic locking.
-     * Concurrency-safe: the debit operation uses versioned UPDATE to prevent double-spend.
-     */
     private function chargeWallet(Order $order): Payment
     {
-        /** @var WalletService $walletService */
+
         $walletService = App::make(WalletService::class);
 
         try {
@@ -84,12 +68,6 @@ class PaymentService
         }
     }
 
-    /**
-     * Deterministic mock used for load testing. Tokens:
-     *   "mock_success" -> success
-     *   "mock_fail"    -> failure
-     *   "mock_random"  -> 95% success rate
-     */
     private function chargeMock(Order $order, string $token): Payment
     {
         $succeed = match ($token) {

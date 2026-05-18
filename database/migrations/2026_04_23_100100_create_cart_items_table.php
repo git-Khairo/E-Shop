@@ -16,7 +16,6 @@ return new class extends Migration
             $table->decimal('unit_price_snapshot', 10, 2);
             $table->timestamps();
 
-            // Each (user, product) appears at most once; quantity is updated in place.
             $table->unique(['user_id', 'product_id']);
         });
     }
