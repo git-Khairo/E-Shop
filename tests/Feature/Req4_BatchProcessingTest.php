@@ -37,6 +37,8 @@ class Req4_BatchProcessingTest extends TestCase
 {
     use RefreshDatabase;
 
+    private int $userId;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -47,6 +49,7 @@ class Req4_BatchProcessingTest extends TestCase
             'email'    => 'batch@test.com',
             'password' => bcrypt('password'),
         ]);
+        $this->userId = $user->id;
 
         // Seed 100 orders for batch testing
         $orders = [];
@@ -184,7 +187,7 @@ class Req4_BatchProcessingTest extends TestCase
                 if (count($processedIds) === 50) {
                     Order::create([
                         'reference'      => 'ORD-MID-INSERT',
-                        'user_id'        => 1,
+                        'user_id'        => $this->userId,
                         'status'         => 'confirmed',
                         'payment_status' => 'paid',
                         'subtotal'       => 99.99,

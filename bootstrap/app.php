@@ -34,6 +34,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'concurrency' => \App\Http\Middleware\ConcurrencyLimiter::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

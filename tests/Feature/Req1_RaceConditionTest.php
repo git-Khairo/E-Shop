@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\categories;
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
@@ -40,16 +40,19 @@ class Req1_RaceConditionTest extends TestCase
     {
         parent::setUp();
 
-        // Seed a product with known stock
+        $category = categories::create(['type' => 'Test Category']);
+
         Product::create([
             'name'          => 'Test Widget',
             'slug'          => 'test-widget',
             'sku'           => 'TW-001',
             'price'         => 25.00,
+            'image'         => 'test-widget.jpg',
             'stock'         => 10,
             'stock_version' => 0,
             'is_active'     => true,
-            'categories_id' => 1,
+            'categories_id' => $category->id,
+            'amount'        => 0,
         ]);
     }
 

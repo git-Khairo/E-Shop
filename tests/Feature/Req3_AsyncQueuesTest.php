@@ -109,9 +109,9 @@ class Req3_AsyncQueuesTest extends TestCase
         Queue::assertPushedOn('emails', SendOrderConfirmationEmail::class);
         Queue::assertPushedOn('invoices', GenerateInvoicePdf::class);
 
-        // Verify they are NOT on the same queue
-        Queue::assertNotPushedOn('invoices', SendOrderConfirmationEmail::class);
-        Queue::assertNotPushedOn('emails', GenerateInvoicePdf::class);
+        // Verify they are NOT on the same queue (Laravel 11 has assertNotPushed, not assertNotPushedOn)
+        Queue::assertNotPushed(SendOrderConfirmationEmail::class, fn ($job, $queue) => $queue === 'invoices');
+        Queue::assertNotPushed(GenerateInvoicePdf::class, fn ($job, $queue) => $queue === 'emails');
     }
 
     /**

@@ -43,9 +43,9 @@ class Req2_ResourceManagementTest extends TestCase
         parent::setUp();
         Cache::flush();
 
-        // Register a test route with the concurrency limiter
+        // Under /api/* so the SPA catch-all in web.php does not steal this route
         Route::middleware(ConcurrencyLimiter::class . ':test,3')
-            ->get('/test/limited', function () {
+            ->get('/api/test/limited', function () {
                 return response()->json(['status' => 'ok']);
             });
     }
@@ -78,11 +78,14 @@ class Req2_ResourceManagementTest extends TestCase
     {
         $maxSlots = 3;
 
-        // Simulate 3 "active" requests by incrementing the semaphore counter
-        Cache::put('semaphore:test', $maxSlots, now()->addMinutes(1));
+        // Simulate 3 active slots via increment (compatible with Cache::increment in middleware)
+        Cache::forget('semaphore:test');
+        for ($i = 0; $i < $maxSlots; $i++) {
+            Cache::increment('semaphore:test');
+        }
 
         // The 4th request should be rejected with 429
-        $response = $this->getJson('/test/limited');
+        $response = $this->getJson('/api/test/limited');
         $this->assertEquals(429, $response->status(), 'AFTER: 4th concurrent request rejected (429).');
         $this->assertStringContainsString('busy', $response->json('message'));
     }
@@ -96,7 +99,7 @@ class Req2_ResourceManagementTest extends TestCase
         Cache::forget('semaphore:test');
 
         // First request should succeed and increment counter
-        $response = $this->getJson('/test/limited');
+        $response = $this->getJson('/api/test/limited');
         $this->assertEquals(200, $response->status());
 
         // Counter should be back to 0 after request completes (finally block)

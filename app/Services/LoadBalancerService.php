@@ -93,8 +93,9 @@ class LoadBalancerService
      */
     private function roundRobin(array $servers): array
     {
-        $counter = Cache::increment('lb:rr:counter');
-        $index = ($counter - 1) % count($servers);
+        $counter = $this->nextCounter('lb:rr:counter');
+        $index = $this->indexFromCounter($counter, count($servers));
+
         return $servers[$index];
     }
 
@@ -114,8 +115,9 @@ class LoadBalancerService
             }
         }
 
-        $counter = Cache::increment('lb:wrr:counter');
-        $index = ($counter - 1) % count($pool);
+        $counter = $this->nextCounter('lb:wrr:counter');
+        $index = $this->indexFromCounter($counter, count($pool));
+
         return $pool[$index];
     }
 
@@ -134,17 +136,22 @@ class LoadBalancerService
     private function leastConnections(array $servers): array
     {
         $minConns = PHP_INT_MAX;
-        $selected = $servers[0];
+        $candidates = [];
 
         foreach ($servers as $server) {
             $conns = (int) Cache::get("lb:lc:active:{$server['id']}", 0);
             if ($conns < $minConns) {
                 $minConns = $conns;
-                $selected = $server;
+                $candidates = [$server];
+            } elseif ($conns === $minConns) {
+                $candidates[] = $server;
             }
         }
 
-        // Atomically increment active connections for the selected server
+        // Round-robin among tied servers so equal load is spread evenly
+        $counter = $this->nextCounter('lb:lc:tiebreaker');
+        $selected = $candidates[$this->indexFromCounter($counter, count($candidates))];
+
         Cache::increment("lb:lc:active:{$selected['id']}");
 
         return $selected;
@@ -183,12 +190,35 @@ class LoadBalancerService
     }
 
     /**
+     * Atomic counter compatible with all cache drivers (database returns false on missing keys).
+     */
+    private function nextCounter(string $key): int
+    {
+        $value = Cache::increment($key);
+
+        if ($value !== false) {
+            return (int) $value;
+        }
+
+        Cache::add($key, 0, now()->addDay());
+        $value = Cache::increment($key);
+
+        return $value !== false ? (int) $value : 1;
+    }
+
+    private function indexFromCounter(int $counter, int $count): int
+    {
+        return ((max(1, $counter) - 1) % $count + $count) % $count;
+    }
+
+    /**
      * Reset all counters (for testing).
      */
     public function resetCounters(): void
     {
         Cache::forget('lb:rr:counter');
         Cache::forget('lb:wrr:counter');
+        Cache::forget('lb:lc:tiebreaker');
         Cache::forget('monitor:lb:total_requests');
         foreach ($this->servers as $server) {
             Cache::forget("monitor:lb:requests:{$server['id']}");
