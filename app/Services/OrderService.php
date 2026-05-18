@@ -37,36 +37,19 @@ class OrderService
 
         $strategy = config('commerce.stock_strategy', 'optimistic');
 
-        $order = DB::transaction(function () use ($dto, $strategy) {
-            $subtotal = 0.0;
-            $lines    = [];
+        $items = collect($dto->items)->sortBy('productId')->values();
 
-            $items = collect($dto->items)->sortBy('productId')->values();
+        if ($strategy === 'optimistic') {
+            $lines = [];
+            $subtotal = 0.0;
 
             foreach ($items as $item) {
-
-                $product = $strategy === 'pessimistic'
-                    ? $this->products->lockForUpdate($item->productId)
-                    : $this->products->findById($item->productId);
-
+                $product = $this->products->findById($item->productId);
                 if (! $product || ! $product->is_active) {
                     throw new InsufficientStockException($item->productId, $item->quantity, 0);
                 }
 
-                if ($strategy === 'pessimistic') {
-
-                    if ($product->stock < $item->quantity) {
-                        throw new InsufficientStockException(
-                            $item->productId, $item->quantity, $product->stock
-                        );
-                    }
-                    $product->stock -= $item->quantity;
-                    $product->stock_version += 1;
-                    $product->save();
-                } else {
-
-                    $this->stock->decrementOptimistic($item->productId, $item->quantity);
-                }
+                $this->stock->decrementOptimistic($item->productId, $item->quantity);
 
                 $lineTotal = round(((float) $product->price) * $item->quantity, 2);
                 $subtotal += $lineTotal;
@@ -80,23 +63,75 @@ class OrderService
                 ];
             }
 
-            $order = $this->orders->create([
-                'reference'      => 'ORD-'.strtoupper(Str::random(10)),
-                'user_id'        => $dto->userId,
-                'status'         => 'pending',
-                'payment_status' => 'pending',
-                'subtotal'       => $subtotal,
-                'total'          => $subtotal,
-                'price'          => $subtotal,
-                'products'       => $lines,
-            ]);
+            $order = DB::transaction(function () use ($dto, $subtotal, $lines) {
+                $order = $this->orders->create([
+                    'reference'      => 'ORD-'.strtoupper(Str::random(10)),
+                    'user_id'        => $dto->userId,
+                    'status'         => 'pending',
+                    'payment_status' => 'pending',
+                    'subtotal'       => $subtotal,
+                    'total'          => $subtotal,
+                    'price'          => $subtotal,
+                    'products'       => $lines,
+                ]);
 
-            foreach ($lines as $line) {
-                OrderItem::create(['order_id' => $order->id] + $line);
-            }
+                foreach ($lines as $line) {
+                    OrderItem::create(['order_id' => $order->id] + $line);
+                }
 
-            return $order;
-        }, 3);
+                return $order;
+            });
+        } else {
+            $order = DB::transaction(function () use ($dto, $items) {
+                $subtotal = 0.0;
+                $lines    = [];
+
+                foreach ($items as $item) {
+                    $product = $this->products->lockForUpdate($item->productId);
+
+                    if (! $product || ! $product->is_active) {
+                        throw new InsufficientStockException($item->productId, $item->quantity, 0);
+                    }
+
+                    if ($product->stock < $item->quantity) {
+                        throw new InsufficientStockException(
+                            $item->productId, $item->quantity, $product->stock
+                        );
+                    }
+                    $product->stock -= $item->quantity;
+                    $product->stock_version += 1;
+                    $product->save();
+
+                    $lineTotal = round(((float) $product->price) * $item->quantity, 2);
+                    $subtotal += $lineTotal;
+
+                    $lines[] = [
+                        'product_id'            => $product->id,
+                        'product_name_snapshot' => $product->name,
+                        'quantity'              => $item->quantity,
+                        'unit_price'            => $product->price,
+                        'line_total'            => $lineTotal,
+                    ];
+                }
+
+                $order = $this->orders->create([
+                    'reference'      => 'ORD-'.strtoupper(Str::random(10)),
+                    'user_id'        => $dto->userId,
+                    'status'         => 'pending',
+                    'payment_status' => 'pending',
+                    'subtotal'       => $subtotal,
+                    'total'          => $subtotal,
+                    'price'          => $subtotal,
+                    'products'       => $lines,
+                ]);
+
+                foreach ($lines as $line) {
+                    OrderItem::create(['order_id' => $order->id] + $line);
+                }
+
+                return $order;
+            }, 3);
+        }
 
         foreach ($dto->items as $item) {
             $this->productCache->invalidateCache($item->productId);

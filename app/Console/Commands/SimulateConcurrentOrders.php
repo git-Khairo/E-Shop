@@ -109,7 +109,9 @@ class SimulateConcurrentOrders extends Command
             $pid = pcntl_fork();
 
             if ($pid === 0) {
-                    socket_close($sockets[0]);
+                socket_close($sockets[0]);
+                \DB::disconnect();
+                \DB::reconnect();
                 [$s, $o, $x] = $this->placeOne($service, $userId, $productId, $qty);
                 socket_write($sockets[1], "{$s},{$o},{$x}", 32);
                 socket_close($sockets[1]);
@@ -147,6 +149,7 @@ class SimulateConcurrentOrders extends Command
         } catch (PaymentFailedException) {
             return [0, 0, 1];
         } catch (\Throwable $e) {
+            \Log::error('Simulator error: '.$e->getMessage());
             return [0, 0, 1];
         }
     }

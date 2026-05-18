@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class StockService
 {
-    private const MAX_OPTIMISTIC_RETRIES = 5;
+    private const MAX_OPTIMISTIC_RETRIES = 50;
 
     public function __construct(
         private readonly ProductRepositoryInterface $repo,
@@ -56,7 +56,7 @@ class StockService
                 return;
             }
 
-            $sleepUs = (int) ((2 ** $attempt) * 1000 + random_int(0, 1000));
+            $sleepUs = random_int(100, 1000 * min($attempt, 5));
             usleep($sleepUs);
 
             Log::debug('Optimistic lock retry', [
